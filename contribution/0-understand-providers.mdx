@@ -1,0 +1,39 @@
+---
+sidebar_position: 1
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Link from '@docusaurus/Link'
+
+# 👋 Provider Intro
+## Situation Today
+
+![today](/img/contribution/Picture.png)
+
+Most often you use an API to create Infrastructure in the cloud. More advanced teams have utilized the benefits of Infrastructure as Code with tools like Terraform. However while offering already massive benefits like reproducability and version control there is one thing missing. **What happens if your landscape changes, after you applied it?** It is not consistent with the state specified in the configuration file. 
+
+## Introducing Crossplane
+
+![crossplane](/img/contribution/Picture0.png)
+
+Having faced these struggles, especially in larger organization, one can quickly see just using Infrastructure as Code is not enough. We want clarity in the state of our landscape. When we define Infrastructure as Code it should really be like this definition no matter what.
+This is what Crossplane does for us. It utilizes a declarative approach to handle APIs and therefore uses the Kubernetes reconciliation loop to repeatedly check and ensure that the state from our files matches the actual state at the API. 
+This is what we call Infrastructure as Data. We are not using a high level mark up language, nor dependency trees of related resources. Only Cloud native and Kubernetes like resources, this is the way to the future!
+
+## How it works
+
+![architecture](/img/contribution/Picture1.png)
+
+Crossplane uses the concept of Kubernetes Operators to extend Kubernetes with custom behavior. This enables us to introduce Crossplane Providers and custom Managed Resources to a Control Plane.
+
+#### Control Plane
+
+Since we are now steering and managing external APIs via the cluster, it acts as a cockpit for all our resources. Therefore the original Kubernetes cluster becomes a Control Plane now. 
+
+#### Provider
+
+Using a cockpit without being able to steer is boring. Therefore Providers bring functionality into the Control Plane. They generally consist of two components, first they introduce the ability to use custom API specific resources on a cluster. Second they use a Kubernetes Controller to translate actions on your newly introduced resources into real API calls. 
+
+#### Managed Resource
+
+Managed Resources describe instances of custom API objects. Each Provider usually offers multiple custom objects to a Control Plane. Managed Resources describe instances of these objects. 
