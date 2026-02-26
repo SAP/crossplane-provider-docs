@@ -7,7 +7,7 @@ import TabItem from "@theme/TabItem";
 
 # 🚂 Build, Release & Publish
 
-When developing Crossplane Providers, we propose one process across all projects to ensure high quality and reliability.
+When developing Crossplane Providers, we propose a single process across all projects to ensure high quality and reliability.
 
 This guide walks you through the steps to **build, release, and publish** your changes effectively.
 
@@ -21,48 +21,47 @@ We begin by bringing our code changes into a shippable state by following our De
 
 ### Definition of Done
 
-Any resource or feature we ship should fulfill the following criteria and reflect in their versioning. Requirements for each version build on top of each other.
+Any resource or feature we ship should fulfill the following criteria, reflected in its versioning. Requirements for each version build on top of each other.
 
 | **Category** | Testing                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Documentation                                                                                                                                                                                                                                                                                                                                                |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --- |
-| **v1alpha1** | <ul> <li> basic **Unit tests** ([example](https://github.com/SAP/crossplane-provider-btp/blob/main/internal/controller/account/subaccount/subaccount_test.go)) </li><li> manually e2e tested </li></ul>                                                                                                                                                                                                                                                                                                                                                                                                                | <ul> <li> **One example resource** in kubebuilder common style ([example](https://github.com/SAP/crossplane-provider-cloudfoundry/blob/main/examples/resources/space.yaml)) </li></ul>                                                                                                                                                                       |
-| **v1beta1**  | <ul> <li> full **Unit tests** ([example](https://github.com/SAP/crossplane-provider-btp/blob/main/internal/controller/account/subaccount/subaccount_test.go)) </li><li> at least one **e2e test** ([example](https://github.com/SAP/crossplane-provider-btp/blob/main/test/e2e/subaccount_test.go#L61))</li><li>import testing via external-name annotation ([example](https://github.com/SAP/crossplane-provider-btp/blob/main/test/e2e/subaccount_test.go#L38)) </li> <li> optional **Upgrade testing** ([Documentation](https://github.com/SAP/crossplane-provider-cloudfoundry/tree/main/test/upgrade)) </li></ul> | <ul> <li> optional End-user **guides** in the provider specific reposotory </li><li>**Migration notes** if applicable in the provider specific repository</li></ul> |
+| **v1alpha1** | <ul> <li> basic **unit tests** ([example](https://github.com/SAP/crossplane-provider-btp/blob/main/internal/controller/account/subaccount/subaccount_test.go)) </li><li> manually e2e tested </li></ul>                                                                                                                                                                                                                                                                                                                                                                                                                | <ul> <li> **one example resource** in kubebuilder common style ([example](https://github.com/SAP/crossplane-provider-cloudfoundry/blob/main/examples/resources/space.yaml)) </li></ul>                                                                                                                                                                       |
+| **v1beta1**  | <ul> <li> full **unit tests** ([example](https://github.com/SAP/crossplane-provider-btp/blob/main/internal/controller/account/subaccount/subaccount_test.go)) </li><li> at least one **e2e test** ([example](https://github.com/SAP/crossplane-provider-btp/blob/main/test/e2e/subaccount_test.go#L61))</li><li>import testing via external-name annotation ([example](https://github.com/SAP/crossplane-provider-btp/blob/main/test/e2e/subaccount_test.go#L38)) </li> <li> optional **upgrade testing** ([documentation](https://github.com/SAP/crossplane-provider-cloudfoundry/tree/main/test/upgrade)) </li></ul> | <ul> <li> optional end-user **guides** in the provider-specific repository </li><li>**migration notes** if applicable, in the provider-specific repository</li></ul> |
 | **v1**       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | _[For future]_ Provider resource (CPU/Memory) consumption checks (benchmark environment)                                                                                                                                                                                                                                                                     |     |
 
 ### Build release candidate
 
 Once your code changes are ready to be shipped, the next step is to create a release candidate.
 
-! TODO: is this still the case?
-Provider releases are performed by Provider Leads (see [Subcommunity Moderators](/docs/contribution#join-subcommunity)).
+Provider releases are performed by Maintainers.
 
 To create a release candidate, please follow the steps below.
 
 
-1. Open the Github reposentory of the Project you want to create a release candidate for
-2. Go to the Actions tab
+1. Open the GitHub repository of the project you want to create a release candidate for
+2. Go to the **Actions** tab
 ![Open Github Actions](/img/contribution_open_github_actions.png)
-3. Select `Publish Release Candidate` workflow on the left (could also be named differently depending on the project for example `.github/workflows/release-candidate.yaml`)
+3. Select the `Publish Release Candidate` workflow on the left (it may also be named differently depending on the project, for example `.github/workflows/release-candidate.yaml`)
 <div style={{maxWidth: "220px", margin: "0 auto"}}>
 ![Select `Publish Release Candidate`](/img/contribution_open_publish_release_candidate.png)
 </div>
-4. Select `Run workflow` and the branch you want to create the release candidate from and click on `Run workflow`
+4. Select **Run workflow**, choose the branch you want to create the release candidate from, and click **Run workflow**
 ![Select `Publish Release Candidate`](/img/contribution_search_for_branch.png)
-5. Go back to the Github Project start page and select on the right site in the `Packages` section the matching package (e.g. `crossplane-provider-btp`)
+5. Go back to the GitHub project start page and select the matching package in the **Packages** section on the right side (e.g. `crossplane-provider-btp`)
 <div style={{maxWidth: "220px", margin: "0 auto"}}>
 ![Select `crossplane-provider-<name>`](/img/contribution_select_package.png)
 </div>
 6. Select the newly created image that matches your commit hash
 ![Select your image](/img/contribution_select_your_image.png)
-7. Share the image URL with for example the issuer of the Bug to validate your fix (e.g. `ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp::sha-<commit-hash>`)
+7. Share the image URL with, for example, the reporter of the bug to validate your fix (e.g. `ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp::sha-<commit-hash>`)
 
 ### Validate Build
 
-To validate an build, please follow the steps below to use the release candidate image created for your fix.
+To validate a build, please follow the steps below to use the release candidate image created for your fix.
 
 1. Create a KinD cluster locally or use a cluster in your development environment.
-2. Set up the needed artifactory pull secret in the cluster to be able to pull the release candidate image.
-3. Install the release candidate provider by the following yaml. Don't forget to replace the image URL with the one created for your fix.
+2. Set up the required Artifactory pull secret in the cluster to be able to pull the release candidate image.
+3. Install the release candidate provider using the following YAML. Don't forget to replace the image URL with the one created for your fix.
 
 ```yaml {6}
 apiVersion: pkg.crossplane.io/v1
@@ -77,7 +76,7 @@ spec:
 
 ## Publish a release
 
-Once the release candidate has been validated, we want to publish it, for some fixes/features it makes sense to directly publish a new release, for other ones it makes sense to wait and combine it with other changes in a new release.
+Once the release candidate has been validated, we can publish it. For some fixes and features it makes sense to publish a new release immediately. For others it makes sense to wait and combine them with additional changes in a single release.
 
-If your feature/fix is already on the `main` branch it will be part of the next release, if not please start the process to merge your code changes into `main`.
-For important bug fixes and features let's start a discussion if it makes sense to directly publish a new release or wait for the next one.
+If your feature or fix is already on the `main` branch, it will be included in the next release. If not, please start the process to merge your code changes into `main`.
+For important bug fixes and features, let's start a discussion about whether it makes sense to publish a new release right away or wait for the next one.
