@@ -1,0 +1,146 @@
+---
+sidebar_position: 5
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# 🔨 Solve Tickets
+
+Feedback and a healthy discussion culture are essential to any collaboration.
+
+To create an easy and fast entry into our IaD world, we want to foster and moderate this feedback by **providing templates to raise bugs and feature requests in a consistent process across all components**, making it easier for contributors to participate in various projects.
+
+Are you missing a feature or have you spotted a bug? Get involved and help us make Infrastructure as Data better, step by step, and expand it into new areas.
+
+With open source we want to:
+
+* Promote reuse and collaboration
+* Increase the quality of code and documentation
+* Enable cross-team and cross-organization innovation
+* Give everyone access and the opportunity to shape the future of creating and managing infrastructure in the cloud
+
+To see all related open-source projects, go to:
+
+<button onClick={() => window.open("https://github.com/SAP?q=crossplane-provider&type=all", "_blank")} className='button button--primary'>SAP's Github organization</button>
+<br/><br/>
+
+## Types of projects
+There are different types of projects we want to share for collaboration.
+Let's revisit their purpose to jointly move in a shared direction.
+
+### Shared Documentation
+The Shared Documentation is a place where we want to share best practices, guides, and other helpful information that can be used across all our projects. It is not meant to be a place for project-specific documentation, but rather a place for general information and best practices that can be applied to all projects.
+
+In case of typos, confusing guides, missing information, or if you think an entire topic is missing, please don't hesitate to [submit an improvement](#contribute-as-creator). We welcome any contribution that makes our documentation better and more helpful for everyone.
+
+The Shared Documentation repository can be found here: [crossplane-provider-docs](https://github.com/SAP/crossplane-provider-docs)
+
+### Provider
+Providers are Crossplane packages that bundle a set of Managed Resources and their respective controllers to **allow Crossplane to provision the respective infrastructure resources**.
+
+All providers related to this project can be found in the list below. If you are interested in contributing to one of them, please check out the respective repository and get in touch.
+
+| Provider Name | Description | Repo Link | Backlog Link | Bug? Feature? |
+| --- | --- | --- | --- | --- |
+| crossplane-provider-btp | Crossplane Provider for SAP BTP | [Repo](https://github.com/SAP/crossplane-provider-btp) | [Backlog](https://github.com/SAP/crossplane-provider-btp/issues) | [Create a new issue](https://github.com/SAP/crossplane-provider-btp/issues/new/choose) |
+| crossplane-provider-hana | Crossplane Provider for SAP HANA | [Repo](https://github.com/SAP/crossplane-provider-hana) | [Backlog](https://github.com/SAP/crossplane-provider-hana/issues) | [Create a new issue](https://github.com/SAP/crossplane-provider-hana/issues/new/choose) |
+| crossplane-provider-cloudfoundry | Crossplane Provider for Cloud Foundry | [Repo](https://github.com/SAP/crossplane-provider-cloudfoundry) | [Backlog](https://github.com/SAP/crossplane-provider-cloudfoundry/issues) | [Create a new issue](https://github.com/SAP/crossplane-provider-cloudfoundry/issues/new/choose) |
+
+
+
+### Other powerful helpers
+In addition to the providers, there are also other repositories related to this project. These repositories most often originated from a specific pain point identified during the process of creating and maintaining the providers.
+
+One great example is [xp-clifford](https://github.com/SAP/xp-clifford), a Crossplane Provider Export CLI framework for resource data extraction. It makes it easy to build a CLI tool that can export definitions of external resources in the format of a specific Crossplane Provider's managed resource definitions.
+
+All our powerful helpers that make your life easier can be found in the list below. If you are interested in contributing to one of them, please check out the respective repository and get in touch.
+| Helper Name | Description | Repo Link | Backlog Link | Bug? Feature? |
+| --- | --- | --- | --- | --- |
+| xp-clifford | Crossplane Provider Export CLI framework for resource data extraction | [Repo](https://github.com/SAP/xp-clifford) | [Backlog](https://github.com/SAP/xp-clifford/issues) | [Create a new issue](https://github.com/SAP/xp-clifford/issues/new/choose) |
+
+
+## Contribution steps
+
+:::note
+
+We would love to see you contributing to our projects, whether it's a small typo fix in the documentation or a new feature in one of our providers. Every contribution is welcome and helps us improve our projects.
+If you are interested in contributing, please check out the respective repository and get in touch with us. We are happy to support you on your contribution journey.
+
+:::
+
+### Contribute as reviewer
+We like to develop software that truly solves the problems of our users. To ensure this, we need your feedback on our work. That means everyone is welcome to comment on open PRs and issues, give feedback, and share their opinion.
+Due to different access rights, to be a reviewer who can approve PRs you need to be a member of this repository's team. If you are interested in becoming a reviewer, please get in touch with us.
+
+### Contribute as creator
+
+For additional rights to **open PRs and branches**, you need to be a contributor. If you don't have it feel free to create a fork of the repository and open PRs from there. If you are interested in becoming a contributor, please get in touch with us.
+
+1. Ensure you are a contributor to the repository you want to contribute to (if not, create a fork and open PRs from there)
+2. Create a new branch from `main`, e.g. `feat/addNewResourceXYZ`
+3. Work on your contribution and get in touch with us if you need support
+4. After finalizing your contribution, create a `pull request` against `main`
+5. In the pull request, document your changes including:
+    - Reason for the contribution or change
+    - Description of the feature and the use cases / solved requirements
+    - Suitable reviewers for your change
+6. Your contribution will be reviewed (and hopefully approved) by the maintainers of the project team
+
+## Bugs
+If you spot an error or misbehavior in any of the components, please report it using the **bug template available in the specific repository of the provider/helper/documentation.**
+
+![Create Bug in UI](/img/create_issue.gif)
+
+### Bug flow
+1. **Create** a bug using the template
+    1. Please use the built-in search to look for possible duplicates
+2. An owner of the repository, or its contributors, will **review** and provide feedback. Everyone is welcome to join the discussion and share their opinion.
+    1. *Valid*: Added to backlog or linked to existing bugs
+    1. *Invalid*: Closed, open for discussion, reopen if applicable.
+    1. *More feedback required*: The issue will stay open for some time and will have an `author-action-needed` label to indicate that more information is needed from the issue author to reach a conclusion.
+3. The task will be picked up by **a contributor** (_maybe even yourself_) and **merged into `main`**.
+4. On completion, backlog items as well as GitHub issues will be marked as Done by the contributor.
+
+:::tip
+
+To stay up to date, we recommend using **GitHub's [notification subscription](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-notifications/about-notifications).**
+
+:::
+
+## Feature Requests
+If you believe **a feature is missing in shared components**, please do not hesitate to **get in touch with the community** of the repository.
+
+### Feature Requests flow
+1. **Create** a feature request using the template provided in the specific repository of the provider/helper/documentation.
+    1. Please use the built-in search to look for possible duplicates beforehand
+2. An owner of the repository, or its contributors, will **review** and provide feedback. Everyone is welcome to join the discussion and share their opinion.
+    1. *Valid*: Added to backlog or linked to existing issues
+    1. *Invalid*: Closed, open for discussion, reopen if applicable.
+    1. *More feedback required*: The issue will stay open for some time and will have an `author-action-needed` label to indicate that more information is needed from the issue author to reach a conclusion.
+3. The task will be picked up by **a contributor** (_maybe even yourself_) and **merged into `main`**.
+4. On completion, backlog items as well as GitHub issues will be marked as Done by the contributor.
+
+## Start a discussion
+Sometimes, you want to reach out to the **community to exchange ideas on coding topics** or find additional stakeholders for a possible **feature request**.
+To keep discussions around providers, helpers, and other artifacts searchable and persistent, we encourage using the discussions tab in the respective repository.
+
+<br/><br/>
+
+![topic voting](/img/github_discussion.png)
+
+## Bug fix
+If you want to **directly contribute a fix for a bug**, please follow the steps below:
+
+1. Assign the bug to yourself to indicate that you are working on it
+2. Move the issue to **"In Progress"** in the project board
+3. **Create a new branch** from `main`, e.g. `fix/issue-123-description`
+4. Do the important work on your fix 🔧
+5. After finalizing your fix, create a `pull request` against `main`
+6. In the pull request, document your changes including:
+    - Reason for the contribution or change
+    - Description of the fix and the use cases / solved requirements
+    - Suitable reviewers for your change (feel free to reach out to us if you need help)
+    - A reference to the original bug issue
+6. Check that your contribution meets the [**Definition of Done**](/docs/contribution/solve-tickets#definition-of-done) and that all tests are **passing**
+7. Create a release candidate (see our guide here: [Release process](/docs/contribution/4-solve-tickets.mdx#create-release-candidate))
+8. Get in contact with the issue reporter to validate your fix 💬
