@@ -1,0 +1,29 @@
+{
+  "name": "crossplane-provider-docs",
+  "version": "1.0.0",
+  "description": "[![REUSE status](https://api.reuse.software/badge/github.com/SAP/crossplane-provider-docs)](https://api.reuse.software/info/github.com/SAP/crossplane-provider-docs)",
+  "main": "index.js",
+  "scripts": {
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SAP/crossplane-provider-docs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SAP/crossplane-provider-docs/issues"
+  },
+  "homepage": "https://github.com/SAP/crossplane-provider-docs#readme",
+  "dependencies": {
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  }
+}

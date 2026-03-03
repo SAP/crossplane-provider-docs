@@ -1,0 +1,16 @@
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.iml
+*.code-workspace
+
+node_modules
+package-lock.json
+
+.eslintcache
+
+.docusaurus
+.cache-loader
+
+build
