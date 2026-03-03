@@ -92,7 +92,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} SAP SE. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} SAP SE or an SAP affiliate company. All rights reserved.`,
       },
       prism: {
         theme: require('prism-react-renderer').themes.github,
