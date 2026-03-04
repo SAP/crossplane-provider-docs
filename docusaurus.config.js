@@ -7,7 +7,7 @@ const config = {
   favicon: 'img/co_axolotl.png',
 
   url: 'https://sap.github.io',
-  baseUrl: '/crossplane-provider-docs/',
+  baseUrl: '/',
 
   organizationName: 'SAP',
   projectName: 'crossplane-provider-docs',
