@@ -27,17 +27,17 @@
   --lp-c-text-3: #6a6a71;
 
   /* Brand Colors */
-  --lp-c-green-1: #1e8f95;
-  --lp-c-green-2: #32bcac;
-  --lp-c-green-3: #3fdec0;
-  --lp-c-green-soft: rgba(16, 185, 129, 0.16);
+  --lp-c-green-1: #C35500;
+  --lp-c-green-2: #E76500;
+  --lp-c-green-3: #FFC933;
+  --lp-c-green-soft: rgba(255, 243, 184, 1);
   --lp-c-brand-1: var(--lp-c-green-1);
   --lp-c-brand-2: var(--lp-c-green-2);
   --lp-c-brand-3: var(--lp-c-green-3);
   --lp-c-brand-soft: var(--lp-c-green-soft);
 
   /* Button Colors */
-  --lp-button-brand-bg: #009f76;
+  --lp-button-brand-bg: #E76500;
   --lp-button-brand-border: transparent;
   --lp-button-brand-text: var(--lp-c-white);
   --lp-button-brand-hover-bg: var(--lp-c-brand-2);
@@ -47,8 +47,8 @@
 
   /* Hero Specific */
   --lp-home-hero-name-color: transparent;
-  --lp-home-hero-name-background: -webkit-linear-gradient(120deg, #1e8f95 30%, #3fdec0);
-  --lp-home-hero-image-background-image: linear-gradient(-45deg, #1e8f95 50%, #3fdec0 50%);
+  --lp-home-hero-name-background: -webkit-linear-gradient(120deg, #E76500 30%, #FFC933);
+  --lp-home-hero-image-background-image: linear-gradient(-45deg, #E76500 50%, #FFC933 50%);
   --lp-home-hero-image-filter: blur(68px);
 
   /* Typography */
@@ -58,13 +58,13 @@
   --lp-font-family-mono: ui-monospace, "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
 
   /* ===== BASE IFM/Docusaurus variables ===== */
-  --ifm-color-primary: #1e8f95;
-  --ifm-color-primary-dark: #1a7f84;
-  --ifm-color-primary-darker: #19777c;
-  --ifm-color-primary-darkest: #146166;
-  --ifm-color-primary-light: #229fa6;
-  --ifm-color-primary-lighter: #24a7ae;
-  --ifm-color-primary-lightest: #2bbdc5;
+  --ifm-color-primary: #E76500;
+  --ifm-color-primary-dark: #C35500;
+  --ifm-color-primary-darker: #6D1900;
+  --ifm-color-primary-darkest: #450B00;
+  --ifm-color-primary-light: #E78C33;
+  --ifm-color-primary-lighter: #F2B266;
+  --ifm-color-primary-lightest: #FFC933;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   --ifm-table-cell-padding: 0.5rem;
@@ -83,7 +83,7 @@
   --ifm-h6-font-size: 1rem;
 
   /* ===== navbar variables ===== */
-  --c-accent: #55e9e9;
+  --c-accent: #FFC933;
   --c-accent-contrast: #081012;
   --c-text-strong: #0a0f12;
   --c-text: #1b242a;
@@ -118,13 +118,13 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #3fdec0;
-  --ifm-color-primary-dark: #29d3b3;
-  --ifm-color-primary-darker: #22ceac;
-  --ifm-color-primary-darkest: #1aaf93;
-  --ifm-color-primary-light: #55e3c7;
-  --ifm-color-primary-lighter: #62e6cc;
-  --ifm-color-primary-lightest: #87edd9;
+  --ifm-color-primary: #E76500;
+  --ifm-color-primary-dark: #C35500;
+  --ifm-color-primary-darker: #6D1900;
+  --ifm-color-primary-darkest: #450B00;
+  --ifm-color-primary-light: #E78C33;
+  --ifm-color-primary-lighter: #F2B266;
+  --ifm-color-primary-lightest: #FFC933;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
@@ -253,6 +253,32 @@
   height: 100%;
   object-fit: contain;
   z-index: 1;
+  transform-origin: 50% 55%;
+  animation: lp-axolotl-float 10s ease-in-out infinite;
+}
+
+@keyframes lp-axolotl-float {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(3px, -4px) rotate(-0.8deg);
+  }
+  50% {
+    transform: translate(-3px, 3px) rotate(0.7deg);
+  }
+  75% {
+    transform: translate(2px, 4px) rotate(0.5deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-container > .image-src {
+    animation: none;
+  }
 }
 
 /* Hero media queries */
@@ -645,6 +671,11 @@ html[data-theme="dark"] .open-source-section a:hover {
 html[data-theme="dark"] .typing-open-source {
   color: var(--lp-c-green-3);
   border-right-color: var(--lp-c-green-3);
+}
+
+/* ===== Dark mode: feature cards ===== */
+html[data-theme="dark"] .lp-features .lp-feature-card {
+  background: #363639;
 }
 
 /* ===== Dark mode: get-started section ===== */

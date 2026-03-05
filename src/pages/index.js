@@ -2,8 +2,10 @@
 import React, { useEffect } from "react";
 import clsx from "clsx";
 import Layout from "@theme/Layout";
+import ThemedImage from "@theme/ThemedImage";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Link from "@docusaurus/Link";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
@@ -68,38 +70,74 @@ export default function Home() {
           <div className="container">
             <div className="lp-features">
               <div className="lp-feature-card">
-                <img src={require("/img/icons/icon-code.png").default} alt="Code icon" />
+                <ThemedImage
+                  alt="Code icon"
+                  sources={{
+                    light: useBaseUrl("/img/icons/icon-code.png"),
+                    dark: useBaseUrl("/img/icons/icon-code-dark.png"),
+                  }}
+                />
                 <h3>Everything in code</h3>
                 <p>Define your entire cloud landscape using code. Always know exactly what's defined and leverage review-based workflows, version control, and much more.</p>
               </div>
               <div className="lp-feature-card">
-                <img src={require("/img/icons/icon-reconcile.png").default} alt="Reconcile icon" />
+                <ThemedImage
+                  alt="Reconcile icon"
+                  sources={{
+                    light: useBaseUrl("/img/icons/icon-reconcile.png"),
+                    dark: useBaseUrl("/img/icons/icon-reconcile-dark.png"),
+                  }}
+                />
                 <h3>Continuous self-healing</h3>
                 <p>Keep your landscape in sync. Crossplane continuously observes the desired and the actual state and reconciles any differences automatically.</p>
               </div>
               <div className="lp-feature-card">
-                <img src={require("/img/icons/icon-align.png").default} alt="Align icon" />
+                <ThemedImage
+                  alt="Align icon"
+                  sources={{
+                    light: useBaseUrl("/img/icons/icon-align.png"),
+                    dark: useBaseUrl("/img/icons/icon-align-dark.png"),
+                  }}
+                />
                 <h3>One syntax for all</h3>
                 <p>
                   Use a unified approach to define and manage resources across multiple cloud providers and services, reducing infrastructure complexity significantly.
                 </p>
               </div>
               <div className="lp-feature-card">
-                <img src={require("/img/icons/icon-puzzle.png").default} alt="Puzzle icon" />
+                <ThemedImage
+                  alt="Puzzle icon"
+                  sources={{
+                    light: useBaseUrl("/img/icons/icon-puzzle.png"),
+                    dark: useBaseUrl("/img/icons/icon-puzzle-dark.png"),
+                  }}
+                />
                 <h3>Designed for reuse</h3>
                 <p>
                   Define your landscapes in modular building blocks using <i>Crossplane Compositions</i> or <i>Helm charts</i>. Replicate modules easily across different regions or stages.
                 </p>
               </div>
               <div className="lp-feature-card">
-                <img src={require("/img/icons/icon-platform.png").default} alt="Platform icon" />
+                <ThemedImage
+                  alt="Platform icon"
+                  sources={{
+                    light: useBaseUrl("/img/icons/icon-platform.png"),
+                    dark: useBaseUrl("/img/icons/icon-platform-dark.png"),
+                  }}
+                />
                 <h3>Run a platform</h3>
                 <p>
                   Prebuild your own platform tailored to the specific needs of your organization and offer it to development teams in a self-service way.
                 </p>
               </div>
               <div className="lp-feature-card">
-                <img src={require("/img/icons/icon-simple.png").default} alt="Simple icon" />
+                <ThemedImage
+                  alt="Simple icon"
+                  sources={{
+                    light: useBaseUrl("/img/icons/icon-simple.png"),
+                    dark: useBaseUrl("/img/icons/icon-simple-dark.png"),
+                  }}
+                />
                 <h3>Built for everyone</h3>
                 <p>
                   Whether you are a cloud expert or just getting started — our providers are designed to help everyone.
