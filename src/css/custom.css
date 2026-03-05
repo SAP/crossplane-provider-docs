@@ -253,6 +253,32 @@
   height: 100%;
   object-fit: contain;
   z-index: 1;
+  transform-origin: 50% 55%;
+  animation: lp-axolotl-float 10s ease-in-out infinite;
+}
+
+@keyframes lp-axolotl-float {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(3px, -4px) rotate(-0.8deg);
+  }
+  50% {
+    transform: translate(-3px, 3px) rotate(0.7deg);
+  }
+  75% {
+    transform: translate(2px, 4px) rotate(0.5deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-container > .image-src {
+    animation: none;
+  }
 }
 
 /* Hero media queries */
