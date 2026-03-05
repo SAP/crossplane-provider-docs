@@ -1,6 +1,6 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/crossplane-provider-docs)](https://api.reuse.software/info/github.com/SAP/crossplane-provider-docs)
 
-# crossplane-provider-docs
+# Crossplane Provider Documentation
 
 ## About this project
 
