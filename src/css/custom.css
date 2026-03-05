@@ -647,6 +647,11 @@ html[data-theme="dark"] .typing-open-source {
   border-right-color: var(--lp-c-green-3);
 }
 
+/* ===== Dark mode: feature cards ===== */
+html[data-theme="dark"] .lp-features .lp-feature-card {
+  background: #363639;
+}
+
 /* ===== Dark mode: get-started section ===== */
 html[data-theme="dark"] .get-started-section {
   background-color: var(--lp-c-bg-soft);
