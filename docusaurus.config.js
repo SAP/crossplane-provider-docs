@@ -33,6 +33,8 @@ const config = {
             // exclude everything in the btp submodule except the docs/ subfolder
             'crossplane-provider-btp/!(docs)/**',
             'crossplane-provider-btp/!(docs)',
+            'crossplane-provider-hana/!(docs)/**',
+            'crossplane-provider-hana/!(docs)',
           ],
         },
         blog: false,
@@ -80,6 +82,10 @@ const config = {
                 label: 'crossplane-provider-btp',
                 to: '/docs/crossplane-provider-btp/docs/user/external-name',
               },
+              {
+                label: 'crossplane-provider-hana',
+                to: '/docs/crossplane-provider-hana/docs/ADR/20250822-hana-x509-authentication',
+              },
             ],
           },
           {
@@ -103,7 +109,7 @@ const config = {
   // static/ contains all images for this repo (img/ subfolder)
   // Each submodule's docs/ directory is added so that images in docs/img/ are served at /img/...
   // To add a new submodule, append its docs path, e.g. 'docs/crossplane-provider-xyz/docs'
-  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs'],
+  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs'],
 };
 
 module.exports = config;
