@@ -33,6 +33,8 @@ const config = {
             // exclude everything in the btp submodule except the docs/ subfolder
             'crossplane-provider-btp/!(docs)/**',
             'crossplane-provider-btp/!(docs)',
+            'xp-clifford/!(docs)/**',
+            'xp-clifford/!(docs)',
           ],
         },
         blog: false,
@@ -103,7 +105,7 @@ const config = {
   // static/ contains all images for this repo (img/ subfolder)
   // Each submodule's docs/ directory is added so that images in docs/img/ are served at /img/...
   // To add a new submodule, append its docs path, e.g. 'docs/crossplane-provider-xyz/docs'
-  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs'],
+  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs',  'docs/xp-clifford/docs'],
 };
 
 module.exports = config;

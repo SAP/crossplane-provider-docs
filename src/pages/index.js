@@ -48,6 +48,9 @@ export default function Home() {
                 <div className="action medium alt">
                   <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user/external-name">crossplane-provider-btp</a>
                 </div>
+                <div className="action medium alt">
+                  <a href="/crossplane-provider-docs/docs/xp-clifford/docs">Migrate existing resources to Crossplane (CLI)</a>
+                </div>
               </div>
             </div>
           </div>
@@ -159,6 +162,9 @@ export default function Home() {
             or explore{" "}
             <Link to="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user/external-name">
               our crossplane provider for SAP BTP
+            </Link>
+            <Link to="/crossplane-provider-docs/docs/xp-clifford/docs">
+              How to bring your existing cloud landscapes to Crossplane providers
             </Link>
           </span>
         </section>
