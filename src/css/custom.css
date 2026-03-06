@@ -814,14 +814,26 @@ html[data-theme="light"] #__docusaurus :where(.markdown, .theme-doc-markdown, .c
   }
 }
 
-/* ===== Dark mode: add light background to documentation images ===== */
-html[data-theme="dark"] .theme-doc-markdown img:not([src*="axolotl"]):not([src*="icon-"]),
-html[data-theme="dark"] .markdown img:not([src*="axolotl"]):not([src*="icon-"]),
-html[data-theme="dark"] article.markdown img:not([src*="axolotl"]):not([src*="icon-"]),
-html[data-theme="dark"] main img:not([src*="axolotl"]):not([src*="icon-"]):not(.lp-feature-card img):not(.image-src),
-html[data-theme="dark"] [class*="docMainContainer"] img:not([src*="axolotl"]):not([src*="icon-"]),
-html[data-theme="dark"] [class*="docItemContainer"] img:not([src*="axolotl"]):not([src*="icon-"]) {
-  background-color: rgba(255, 255, 255, 0.75) !important;
+/* ===== :::image-light directive: always show light background around images ===== */
+/*
+ * Usage in MDX:
+ *
+ *   :::image-light
+ *   ![alt text](./img/my-diagram.png)
+ *   :::
+ *
+ * Applies a white background with padding/radius in BOTH light and dark mode.
+ * Useful for diagrams with transparent backgrounds.
+ */
+.doc-image-light img {
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 8px;
   border-radius: 8px;
 }
+
+html[data-theme="dark"] .doc-image-light img {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  padding: 8px;
+  border-radius: 8px;
+}
+
