@@ -817,9 +817,11 @@ html[data-theme="light"] #__docusaurus :where(.markdown, .theme-doc-markdown, .c
 /* ===== Dark mode: add light background to documentation images ===== */
 html[data-theme="dark"] .theme-doc-markdown img:not([src*="axolotl"]):not([src*="icon-"]),
 html[data-theme="dark"] .markdown img:not([src*="axolotl"]):not([src*="icon-"]),
-html[data-theme="dark"] article.markdown img:not([src*="axolotl"]):not([src*="icon-"]) {
-  background-color: rgba(255, 255, 255, 0.50) !important;
-  padding: 5px;
-  border-radius: 20px;
+html[data-theme="dark"] article.markdown img:not([src*="axolotl"]):not([src*="icon-"]),
+html[data-theme="dark"] main img:not([src*="axolotl"]):not([src*="icon-"]):not(.lp-feature-card img):not(.image-src),
+html[data-theme="dark"] [class*="docMainContainer"] img:not([src*="axolotl"]):not([src*="icon-"]),
+html[data-theme="dark"] [class*="docItemContainer"] img:not([src*="axolotl"]):not([src*="icon-"]) {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  padding: 8px;
+  border-radius: 8px;
 }
-
