@@ -82,6 +82,10 @@ const config = {
                 label: 'crossplane-provider-btp',
                 to: '/docs/crossplane-provider-btp/docs/user/external-name',
               },
+              {
+                label: 'xp-clifford',
+                to: '/docs/xp-clifford',
+              },
             ],
           },
           {
