@@ -72,6 +72,29 @@ npm start
 
 This starts a local dev server at `http://localhost:3000` and opens the browser automatically. Most changes are reflected live without restarting the server.
 
+### Dark Mode: Images with light background (`:::image-light`)
+
+Some diagrams or screenshots have a transparent or white background and become hard to read in dark mode. Wrap them with the `:::image-light` directive to automatically add a subtle light background behind the image in dark mode.
+
+**Usage in MDX/Markdown:**
+
+```mdx
+:::image-light
+![Architecture overview](/img/contribution/Picture.png)
+:::
+```
+
+**What it does:**
+
+- Adds a `rgba(255, 255, 255, 0.9)` background behind the image
+- Adds `8px` padding and rounded corners (`border-radius: 8px`)
+- Works in both light and dark mode
+- Does **not** affect logos, icons, or the Axolotl mascot (these are excluded by default from the global dark-mode image rule)
+
+**When to use it:**
+
+Use `:::image-light` for screenshots, architecture diagrams, or any image that has a transparent or near-white background and looks broken/invisible in dark mode.
+
 ### Build
 
 ```bash

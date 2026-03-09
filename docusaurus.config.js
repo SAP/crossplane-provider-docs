@@ -1,4 +1,10 @@
 // @ts-check
+// remark-directive is ESM-only; require() returns the module namespace object
+const remarkDirective = (() => {
+  const m = require('remark-directive');
+  return m.default ?? m;
+})();
+const remarkImageLight = require('./src/plugins/remark-image-light');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -29,6 +35,7 @@ const config = {
           path: 'docs',
           routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
+          remarkPlugins: [remarkDirective, remarkImageLight],
           exclude: [
             // exclude everything in the btp submodule except the docs/ subfolder
             'crossplane-provider-btp/!(docs)/**',
