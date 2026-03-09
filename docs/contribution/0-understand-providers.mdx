@@ -8,22 +8,25 @@ import Link from '@docusaurus/Link'
 # 👋 Provider Intro
 ## Situation Today
 
+:::image-light
 ![today](/img/contribution/Picture.png)
+:::
 
 Most often, you use an API to create infrastructure in the cloud. More advanced teams have leveraged the benefits of Infrastructure as Code with tools like Terraform. While this already offers massive benefits like reproducibility and version control, there is one thing missing: **what happens if your landscape changes after you apply it?** It is no longer consistent with the state specified in the configuration file.
 
 ## Introducing Crossplane
 
+:::image-light
 ![crossplane](/img/contribution/Picture0.png)
-
+:::
 Having faced these challenges, especially in larger organizations, one can quickly see that using Infrastructure as Code alone is not enough. We want clarity about the state of our landscape. When we define Infrastructure as Code, it should truly reflect that definition no matter what.
 This is what Crossplane does for us. It uses a declarative approach to manage APIs and leverages the Kubernetes reconciliation loop to repeatedly check and ensure that the state defined in our files matches the actual state at the API.
 This is what we call Infrastructure as Data. We are not using a high-level markup language or dependency trees of related resources. Only Cloud native and Kubernetes like resources, this is the way to the future!
 
 ## How it works
-
+:::image-light
 ![architecture](/img/contribution/Picture1.png)
-
+:::
 Crossplane uses the concept of Kubernetes Operators to extend Kubernetes with custom behavior. This enables us to introduce Crossplane Providers and custom Managed Resources to a Control Plane.
 
 #### Control Plane

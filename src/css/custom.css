@@ -817,10 +817,12 @@ html[data-theme="light"] #__docusaurus :where(.markdown, .theme-doc-markdown, .c
 /* ===== :::image-light directive: always show light background around images ===== */
 /*
  * Usage in MDX:
- *
  *   :::image-light
  *   ![alt text](./img/my-diagram.png)
  *   :::
+ *
+ * Usage in JSX:
+ *   <div className="doc-image-light">...</div>
  *
  * Applies a white background with padding/radius in BOTH light and dark mode.
  * Useful for diagrams with transparent backgrounds.
