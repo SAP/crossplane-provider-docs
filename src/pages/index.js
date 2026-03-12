@@ -49,7 +49,7 @@ export default function Home() {
                   <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user/external-name">crossplane-provider-btp</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/ADR/hana-x509-authentication">crossplane-provider-hana</a>
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/user-stories/setup">crossplane-provider-hana</a>
                 </div>
               </div>
             </div>
@@ -166,7 +166,7 @@ export default function Home() {
           </span>
           <span>
             or explore{" "}
-            <Link to="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/ADR/hana-x509-authentication">
+            <Link to="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/user-stories/setup">
               our crossplane provider for SAP HANA
             </Link>
           </span>
