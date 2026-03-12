@@ -1,3 +1,6 @@
 [submodule "docs/crossplane-provider-btp"]
 	path = docs/crossplane-provider-btp
 	url = https://github.com/SAP/crossplane-provider-btp.git
+[submodule "docs/crossplane-provider-hana"]
+	path = docs/crossplane-provider-hana
+	url = https://github.com/SAP/crossplane-provider-hana.git
