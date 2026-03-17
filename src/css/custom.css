@@ -813,3 +813,29 @@ html[data-theme="light"] #__docusaurus :where(.markdown, .theme-doc-markdown, .c
     font-size: 2em;
   }
 }
+
+/* ===== :::image-light directive: always show light background around images ===== */
+/*
+ * Usage in MDX:
+ *   :::image-light
+ *   ![alt text](./img/my-diagram.png)
+ *   :::
+ *
+ * Usage in JSX:
+ *   <div className="doc-image-light">...</div>
+ *
+ * Applies a white background with padding/radius in BOTH light and dark mode.
+ * Useful for diagrams with transparent backgrounds.
+ */
+.doc-image-light img {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+html[data-theme="dark"] .doc-image-light img {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  padding: 8px;
+  border-radius: 8px;
+}
+

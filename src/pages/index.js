@@ -160,7 +160,7 @@ export default function Home() {
           </Link>
           <span>
             or explore{" "}
-            <Link to="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user/external-name">
+            <Link to="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user-stories/btp">
               our crossplane provider for SAP BTP
             </Link>
           </span>
@@ -178,11 +178,13 @@ export default function Home() {
               <div className="open-source-wrapper">
                 <div className="typing-open-source">100% open-source</div>
               </div>
-              <img
-                src={require("/img/landingpage-crossplane.png").default}
-                alt="Crossplane based on CNCF"
-                style={{ maxWidth: "100%", marginBottom: "24px" }}
-              />
+              <div className="doc-image-light">
+                <img
+                  src={require("/img/landingpage-crossplane.png").default}
+                  alt="Crossplane based on CNCF"
+                  style={{ maxWidth: "100%", marginBottom: "24px" }}
+                />
+              </div>
               <p>
                 Through technical <b>providers</b>, we request, update and delete the cloud resources we want to
                 orchestrate. They <b>allow us to describe environments in code</b>. Most SAP cloud services do not
