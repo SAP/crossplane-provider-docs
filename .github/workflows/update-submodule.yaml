@@ -1,0 +1,167 @@
+name: Update provider submodules when docs change
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # Daily 08:00 Berlin time (UTC+1)
+  workflow_dispatch:       # Manual trigger for testing
+
+jobs:
+  check-and-update:
+    name: Check for doc changes and update submodule
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    strategy:
+      matrix:
+        # To add a new provider:
+        # 1. Register it as a git submodule in this repo:
+        #      git submodule add https://github.com/SAP/<provider-name>.git docs/<provider-name>
+        #    This updates .gitmodules and creates the submodule directory.
+        # 2. Add an entry to the list below with:
+        #    - name: the submodule directory name (must match the path in .gitmodules)
+        #    - repo: the GitHub repo in "owner/repo" format
+        #    - submodule_path: relative path to the submodule in this repo (i.e. docs/<name>)
+        # 3. Wire up the provider's docs in docusaurus.config.js and sidebars.js,
+        #    following the existing crossplane-provider-btp pattern.
+        provider:
+          - name: crossplane-provider-btp
+            repo: SAP/crossplane-provider-btp
+            submodule_path: docs/crossplane-provider-btp
+          # - name: crossplane-provider-hana
+          #   repo: SAP/crossplane-provider-hana
+          #   submodule_path: docs/crossplane-provider-hana
+
+    steps:
+      - name: Checkout docs repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check for docs changes and update submodule
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const provider = '${{ matrix.provider.name }}';
+            const providerRepo = '${{ matrix.provider.repo }}';
+            const submodulePath = '${{ matrix.provider.submodule_path }}';
+
+            // 1. Get current submodule SHA
+            const { execSync } = require('child_process');
+            const currentSha = execSync(`git -C ${submodulePath} rev-parse HEAD`).toString().trim();
+            console.log(`Current submodule SHA: ${currentSha}`);
+
+            // 2. Get remote HEAD SHA
+            const [owner, repo] = providerRepo.split('/');
+            const { data: branch } = await github.rest.repos.getBranch({
+              owner, repo, branch: 'main'
+            });
+            const remoteSha = branch.commit.sha;
+            console.log(`Remote HEAD SHA: ${remoteSha}`);
+
+            // 3. No update needed?
+            if (currentSha === remoteSha) {
+              console.log('Submodule is up to date, nothing to do.');
+              core.setOutput('needs_update', 'false');
+              return;
+            }
+
+            // 4. Get file diff between current and remote SHA
+            const { data: comparison } = await github.rest.repos.compareCommitsWithBasehead({
+              owner, repo,
+              basehead: `${currentSha}...${remoteSha}`
+            });
+
+            // 5. Check if any changed file is under docs/
+            const docFiles = comparison.files?.filter(f => f.filename.startsWith('docs/')) ?? [];
+            console.log(`Doc files changed: ${docFiles.map(f => f.filename).join(', ') || 'none'}`);
+
+            if (docFiles.length === 0) {
+              console.log('No docs/** files changed between commits, skipping PR.');
+              core.setOutput('needs_update', 'false');
+              return;
+            }
+
+            // 6. Docs changed → set outputs for subsequent steps
+            const shortSha = remoteSha.substring(0, 7);
+            const branchName = `chore/update-${provider}-${shortSha}`;
+            core.setOutput('needs_update', 'true');
+            core.setOutput('remote_sha', remoteSha);
+            core.setOutput('short_sha', shortSha);
+            core.setOutput('branch_name', branchName);
+            core.setOutput('doc_files', docFiles.map(f => f.filename).join('\n'));
+            console.log(`Docs changed! Will update submodule to ${remoteSha}`);
+
+      - name: Close existing open PR for this provider (if any)
+        if: steps.check.outputs.needs_update == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              base: 'main'
+            });
+            const provider = '${{ matrix.provider.name }}';
+            const existing = prs.find(pr => pr.head.ref.startsWith(`chore/update-${provider}-`));
+            if (existing) {
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: existing.number,
+                state: 'closed'
+              });
+              console.log(`Closed superseded PR #${existing.number}`);
+            }
+
+      - name: Create update branch and update submodule
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          git checkout -b "${{ steps.check.outputs.branch_name }}"
+          cd "${{ matrix.provider.submodule_path }}"
+          git fetch origin
+          git checkout "${{ steps.check.outputs.remote_sha }}"
+          cd -
+          git add "${{ matrix.provider.submodule_path }}"
+          git commit -m "chore: update ${{ matrix.provider.name }} docs to ${{ steps.check.outputs.short_sha }}"
+          git push origin "${{ steps.check.outputs.branch_name }}"
+
+      - name: Open pull request
+        if: steps.check.outputs.needs_update == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const provider = '${{ matrix.provider.name }}';
+            const providerRepo = '${{ matrix.provider.repo }}';
+            const sha = '${{ steps.check.outputs.remote_sha }}';
+            const shortSha = '${{ steps.check.outputs.short_sha }}';
+            const branchName = '${{ steps.check.outputs.branch_name }}';
+            const docFiles = `${{ steps.check.outputs.doc_files }}`;
+
+            await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `chore: update ${provider} docs to ${shortSha}`,
+              body: [
+                `## Automated documentation update`,
+                ``,
+                `This PR updates the \`${provider}\` submodule to commit [\`${shortSha}\`](https://github.com/${providerRepo}/commit/${sha}).`,
+                ``,
+                `**Changed doc files:**`,
+                docFiles.split('\n').map(f => `- \`${f}\``).join('\n'),
+                ``,
+                `Please review the documentation changes before merging.`
+              ].join('\n'),
+              head: branchName,
+              base: 'main',
+              draft: false
+            });
