@@ -1,0 +1,25 @@
+# Default: admins own everything not explicitly matched below
+* @SAP/crossplane-provider-docs-admin
+
+# Docs and source: team can review
+/docs/ @SAP/crossplane-provider-docs-admin @SAP/crossplane-provider-docs-team
+/src/ @SAP/crossplane-provider-docs-admin @SAP/crossplane-provider-docs-team
+/static/ @SAP/crossplane-provider-docs-admin @SAP/crossplane-provider-docs-team
+/build/ @SAP/crossplane-provider-docs-admin @SAP/crossplane-provider-docs-team
+
+# Docusaurus config: team can review
+/docusaurus.config.js @SAP/crossplane-provider-docs-admin @SAP/crossplane-provider-docs-team
+/sidebars.js @SAP/crossplane-provider-docs-admin @SAP/crossplane-provider-docs-team
+/package.json @SAP/crossplane-provider-docs-admin @SAP/crossplane-provider-docs-team
+/package-lock.json @SAP/crossplane-provider-docs-admin @SAP/crossplane-provider-docs-team
+
+# Admin-only: workflows, repo config, submodule registration, ownership
+/.github/ @SAP/crossplane-provider-docs-admin
+/.gitmodules @SAP/crossplane-provider-docs-admin
+/README.md @SAP/crossplane-provider-docs-admin
+/CONTRIBUTING.md @SAP/crossplane-provider-docs-admin
+/CODEOWNERS @SAP/crossplane-provider-docs-admin
+/.github/CODEOWNERS @SAP/crossplane-provider-docs-admin
+/REUSE.toml @SAP/crossplane-provider-docs-admin
+/LICENSES/ @SAP/crossplane-provider-docs-admin
+/LICENSE @SAP/crossplane-provider-docs-admin
