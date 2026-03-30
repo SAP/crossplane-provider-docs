@@ -46,7 +46,7 @@ export default function Home() {
                   <a href="/crossplane-provider-docs/docs/contribution/understand-providers">Contribution</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user/external-name">crossplane-provider-btp</a>
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user-stories/account/subaccount">crossplane-provider-btp</a>
                 </div>
                 <div className="action medium alt">
                   <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/user-stories/setup">crossplane-provider-hana</a>

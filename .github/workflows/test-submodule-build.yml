@@ -1,0 +1,87 @@
+name: Test Submodule Docs Build
+
+# Reusable workflow called by provider submodule repos to validate that
+# their docs changes still allow the shared docs hub to build successfully.
+#
+# Add the following as .github/workflows/test-docs-build.yaml in the provider repo.
+# Use a separate file to avoid problems with exclusion of MD files.
+#
+#   name: Test Docs Hub Build
+#
+#   on:
+#     pull_request:
+#       paths:
+#         - 'docs/**'
+#     push:
+#       branches:
+#         - main
+#       paths:
+#         - 'docs/**'
+#
+#   jobs:
+#     test-docs-hub-build-pr:
+#       if: github.event_name == 'pull_request'
+#       uses: SAP/crossplane-provider-docs/.github/workflows/test-submodule-build.yml@main
+#       with:
+#         provider-repo: ${{ github.event.pull_request.head.repo.full_name }}
+#         provider-ref: ${{ github.event.pull_request.head.sha }}
+#         submodule-path: docs/crossplane-provider-btp   # adjust per provider
+#
+#     test-docs-hub-build-push:
+#       if: github.event_name == 'push'
+#       uses: SAP/crossplane-provider-docs/.github/workflows/test-submodule-build.yml@main
+#       with:
+#         provider-repo: ${{ github.repository }}
+#         provider-ref: ${{ github.sha }}
+#         submodule-path: docs/crossplane-provider-btp   # adjust per provider
+
+on:
+  workflow_call:
+    inputs:
+      provider-repo:
+        description: "Full name of the provider repo, e.g. SAP/crossplane-provider-btp"
+        required: true
+        type: string
+      provider-ref:
+        description: "Git SHA of the provider commit to test"
+        required: true
+        type: string
+      submodule-path:
+        description: "Path of the submodule in crossplane-provider-docs, e.g. docs/crossplane-provider-btp"
+        required: true
+        type: string
+
+jobs:
+  test-docs-build:
+    name: Test Docusaurus Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout crossplane-provider-docs
+        uses: actions/checkout@v4
+        with:
+          repository: SAP/crossplane-provider-docs
+          fetch-depth: 1
+
+      - name: Initialize target submodule at its pinned state
+        run: git submodule update --init -- ${{ inputs.submodule-path }}
+
+      - name: Override target submodule with the commit under test
+        run: |
+          cd ${{ inputs.submodule-path }}
+          git fetch https://github.com/${{ inputs.provider-repo }}.git ${{ inputs.provider-ref }}
+          git checkout FETCH_HEAD
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Docusaurus site
+        run: npm run build
