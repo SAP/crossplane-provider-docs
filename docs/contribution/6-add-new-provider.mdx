@@ -1,0 +1,222 @@
+---
+sidebar_position: 8
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 🔌 Register a Repo in the Docs
+
+This guide explains how to add documentation for a new associated provider or helper to this site. Each one lives in its own GitHub repository — referred to here as the **submodule repo**. Its documentation is embedded into `crossplane-provider-docs` as a **Git submodule**, and Docusaurus renders all docs together in a single unified site.
+
+Onboarding a new submodule repo requires changes in two places:
+
+1. **The submodule repo** — add the required `docs/` structure and a GitHub workflow
+2. **The `crossplane-provider-docs` repo** — register the submodule and wire up Docusaurus
+
+---
+
+## 📁 Submodule Repo: Required Structure
+
+The submodule repo must have a `docs/` folder at its root. Docusaurus only reads content from inside this folder — everything else in the repo is excluded.
+
+```
+<repository>/
+└── docs/
+    ├── _category_.json        # sidebar label, position, optional index page
+    ├── img/                   # images referenced in docs (served as /img/...)
+    └── user-guides/          # any subdirectory structure you like
+        └── setup.mdx
+```
+
+:::note
+
+Images must live inside `docs/img/`. Docusaurus serves them at the `/img/...` path. If images are placed anywhere else in the repo, they will not be accessible from the docs site.
+
+:::
+
+### `_category_.json`
+
+Place this file directly inside `docs/` to configure how the section appears in the sidebar:
+
+```json title="docs/_category_.json"
+{
+  "label": "My Provider Name",
+  "position": 10,
+  "link": {
+    "type": "generated-index",
+    "description": "Documentation for My Provider Name."
+  }
+}
+```
+
+Adjust `label` and `position` to control where the section appears in the sidebar.
+
+---
+
+## ⚙️ Submodule Repo: GitHub Workflow
+
+Add a workflow to the submodule repo that validates every docs change against the `crossplane-provider-docs` build. This catches broken links, invalid MDX, or Docusaurus configuration issues before they reach the shared docs repo.
+
+Create the file `.github/workflows/test-docs-build.yaml` in the submodule repo:
+
+```yaml title=".github/workflows/test-docs-build.yaml"
+name: Test Docs Build
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+
+jobs:
+  test-docs-build-pr:
+    if: github.event_name == 'pull_request'
+    uses: SAP/crossplane-provider-docs/.github/workflows/test-submodule-build.yml@main
+    with:
+      provider-repo: ${{ github.event.pull_request.head.repo.full_name }}
+      provider-ref: ${{ github.event.pull_request.head.sha }}
+      submodule-path: docs/crossplane-provider-<name>   # adjust to match your repo
+
+  test-docs-build-push:
+    if: github.event_name == 'push'
+    uses: SAP/crossplane-provider-docs/.github/workflows/test-submodule-build.yml@main
+    with:
+      provider-repo: ${{ github.repository }}
+      provider-ref: ${{ github.sha }}
+      submodule-path: docs/crossplane-provider-<name>   # adjust to match your repo
+```
+
+Replace `crossplane-provider-<name>` with the actual submodule path (e.g. `docs/crossplane-provider-btp`).
+
+:::tip
+
+The reusable workflow this calls is defined in [`SAP/crossplane-provider-docs` → `.github/workflows/test-submodule-build.yml`](https://github.com/SAP/crossplane-provider-docs/blob/main/.github/workflows/test-submodule-build.yml). It checks out the `crossplane-provider-docs` repo, overlays your commit, and runs a full Docusaurus build.
+
+:::
+
+---
+
+## 🔗 `crossplane-provider-docs`: Register the Submodule
+
+In the **`SAP/crossplane-provider-docs`** repository, run the following to register the submodule repo:
+
+```bash
+git submodule add https://github.com/SAP/<repo-name>.git docs/<repo-name>
+git commit -m "chore: add <repo-name> as submodule"
+```
+
+This creates an entry in [`.gitmodules`](https://github.com/SAP/crossplane-provider-docs/blob/main/.gitmodules) and a submodule directory under `docs/`.
+
+---
+
+## 🛠️ `crossplane-provider-docs`: Wire Up Docusaurus
+
+Three files need to be updated to integrate the new submodule repo into the site.
+
+### 1. `docusaurus.config.js`
+
+Open [`docusaurus.config.js`](https://github.com/SAP/crossplane-provider-docs/blob/main/docusaurus.config.js).
+
+**a) Exclude non-docs content from the submodule** ([line 39–46](https://github.com/SAP/crossplane-provider-docs/blob/main/docusaurus.config.js#L39-L46)):
+
+```js title="docusaurus.config.js" {6,7}
+exclude: [
+  // exclude everything in the btp submodule except the docs/ subfolder
+  'crossplane-provider-btp/!(docs)/**',
+  'crossplane-provider-btp/!(docs)',
+  // add your repository:
+  '<repo-name>/!(docs)/**',
+  '<repo-name>/!(docs)',
+],
+```
+
+**b) Register the image directory** ([line 115](https://github.com/SAP/crossplane-provider-docs/blob/main/docusaurus.config.js#L115)):
+
+```js title="docusaurus.config.js" {3}
+staticDirectories: ['static', 'docs/crossplane-provider-btp/docs'],
+// becomes:
+staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/<repo-name>/docs'],
+```
+
+This makes images inside `docs/<repo-name>/docs/img/` accessible at the `/img/...` URL path.
+
+### 2. `sidebars.js`
+
+Open [`sidebars.js`](https://github.com/SAP/crossplane-provider-docs/blob/main/sidebars.js) and add a new category entry following the existing pattern ([line 18–29](https://github.com/SAP/crossplane-provider-docs/blob/main/sidebars.js#L18-L29)):
+
+```js title="sidebars.js" {14-21}
+mainSidebar: [
+  {
+    type: 'category',
+    label: 'Contribution',
+    // ...
+  },
+  {
+    type: 'category',
+    label: 'crossplane-provider-btp',
+    collapsible: true,
+    collapsed: true,
+    items: [{ type: 'autogenerated', dirName: 'crossplane-provider-btp/docs' }],
+  },
+  // add your repository:
+  {
+    type: 'category',
+    label: '<repo-name>',
+    collapsible: true,
+    collapsed: true,
+    items: [{ type: 'autogenerated', dirName: '<repo-name>/docs' }],
+  },
+],
+```
+
+---
+
+## 🤖 `crossplane-provider-docs`: Enable Automated Updates
+
+The daily [`update-submodule.yaml`](https://github.com/SAP/crossplane-provider-docs/blob/main/.github/workflows/update-submodule.yaml) workflow checks for doc changes in registered submodule repos and automatically opens PRs to update the submodule in the `crossplane-provider-docs` repo.
+
+Add your submodule repo to the matrix in [`.github/workflows/update-submodule.yaml` (line 28–34)](https://github.com/SAP/crossplane-provider-docs/blob/main/.github/workflows/update-submodule.yaml#L28-L34):
+
+```yaml title=".github/workflows/update-submodule.yaml" {8-11}
+strategy:
+  matrix:
+    provider:
+      - name: crossplane-provider-btp
+        repo: SAP/crossplane-provider-btp
+        submodule_path: docs/crossplane-provider-btp
+      # add your repository:
+      - name: <repo-name>
+        repo: SAP/<repo-name>
+        submodule_path: docs/<repo-name>
+```
+
+Once this entry is present, the workflow runs daily at 08:00 Berlin time. If any file under `docs/` changed in the submodule repo since the last update, it will open a PR to the `crossplane-provider-docs` repo automatically.
+
+:::note
+
+The workflow can also be triggered manually via the GitHub Actions tab using **Run workflow** — useful for testing the integration immediately without waiting for the daily schedule.
+
+:::
+
+---
+
+## ✅ Verify the Integration
+
+After completing all the steps above, verify the integration end-to-end:
+
+1. **Initialize the submodule locally** and run a test build:
+   ```bash
+   git submodule update --init --recursive
+   npm ci
+   npm run build
+   ```
+   The build must complete without errors.
+
+2. **Open a PR in the submodule repo** that modifies any file under `docs/`. The `Test Docs Build` workflow should trigger and pass.
+
+3. **After merging to `main`** in the submodule repo, trigger the [`Update provider submodules`](https://github.com/SAP/crossplane-provider-docs/actions/workflows/update-submodule.yaml) workflow manually in the `crossplane-provider-docs` repo. It should detect the docs change and open a PR to update the submodule pointer.
