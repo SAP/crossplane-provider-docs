@@ -65,8 +65,8 @@ jobs:
           repository: SAP/crossplane-provider-docs
           fetch-depth: 1
 
-      - name: Initialize target submodule at its pinned state
-        run: git submodule update --init -- ${{ inputs.submodule-path }}
+      - name: Initialize all submodules at their pinned state
+        run: git submodule update --init
 
       - name: Override target submodule with the commit under test
         run: |
