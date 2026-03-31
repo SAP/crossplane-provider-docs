@@ -29,9 +29,9 @@ jobs:
           - name: crossplane-provider-btp
             repo: SAP/crossplane-provider-btp
             submodule_path: docs/crossplane-provider-btp
-          # - name: crossplane-provider-hana
-          #   repo: SAP/crossplane-provider-hana
-          #   submodule_path: docs/crossplane-provider-hana
+          - name: crossplane-provider-hana
+            repo: SAP/crossplane-provider-hana
+            submodule_path: docs/crossplane-provider-hana
 
     steps:
       - name: Checkout docs repo

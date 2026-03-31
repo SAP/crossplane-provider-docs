@@ -48,6 +48,9 @@ export default function Home() {
                 <div className="action medium alt">
                   <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user-stories/account/subaccount">crossplane-provider-btp</a>
                 </div>
+                <div className="action medium alt">
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/user-stories/setup">crossplane-provider-hana</a>
+                </div>
               </div>
             </div>
           </div>
@@ -159,6 +162,12 @@ export default function Home() {
             or explore{" "}
             <Link to="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user-stories/btp">
               our crossplane provider for SAP BTP
+            </Link>
+          </span>
+          <span>
+            or explore{" "}
+            <Link to="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/user-stories/setup">
+              our crossplane provider for SAP HANA
             </Link>
           </span>
         </section>

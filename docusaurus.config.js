@@ -43,6 +43,8 @@ const config = {
             //   'crossplane-provider-hana/!(docs)',
             'crossplane-provider-btp/!(docs)/**',
             'crossplane-provider-btp/!(docs)',
+            'crossplane-provider-hana/!(docs)/**',
+            'crossplane-provider-hana/!(docs)',
           ],
         },
         blog: false,
@@ -90,6 +92,10 @@ const config = {
                 label: 'crossplane-provider-btp',
                 to: '/docs/crossplane-provider-btp/docs/user/external-name',
               },
+              {
+                label: 'crossplane-provider-hana',
+                to: '/docs/crossplane-provider-hana/docs/ADR/20250822-hana-x509-authentication',
+              },
             ],
           },
           {
@@ -111,8 +117,8 @@ const config = {
     }),
 
   // Each submodule's docs/ directory is added so that images in docs/img/ are served at /img/...
-  // Add one entry per new submodule, e.g. 'docs/crossplane-provider-hana/docs'
-  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs'],
+  // To add a new submodule, append its docs path, e.g. 'docs/crossplane-provider-xyz/docs'
+  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs'],
 };
 
 module.exports = config;
