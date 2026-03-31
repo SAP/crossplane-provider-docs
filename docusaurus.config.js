@@ -37,7 +37,10 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [remarkDirective, remarkImageLight],
           exclude: [
-            // exclude everything in the btp submodule except the docs/ subfolder
+            // Exclude everything in a submodule except its docs/ subfolder.
+            // Add two lines per new submodule, e.g. for crossplane-provider-hana:
+            //   'crossplane-provider-hana/!(docs)/**',
+            //   'crossplane-provider-hana/!(docs)',
             'crossplane-provider-btp/!(docs)/**',
             'crossplane-provider-btp/!(docs)',
             'crossplane-provider-hana/!(docs)/**',
@@ -113,7 +116,6 @@ const config = {
       },
     }),
 
-  // static/ contains all images for this repo (img/ subfolder)
   // Each submodule's docs/ directory is added so that images in docs/img/ are served at /img/...
   // To add a new submodule, append its docs path, e.g. 'docs/crossplane-provider-xyz/docs'
   staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs'],
