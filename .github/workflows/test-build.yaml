@@ -6,6 +6,12 @@ on:
       - main
     # Review gh actions docs if you want to further define triggers, paths, etc
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or ref to test build'
+        required: true
+        type: string
 
 jobs:
   test-deploy:
@@ -14,6 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.ref || github.sha }}
           fetch-depth: 0
           submodules: recursive
       - uses: actions/setup-node@v4
