@@ -1,20 +1,11 @@
 name: Test build
 
 on:
-  # Triggered by human-created PRs. Checks out the PR branch directly so all
-  # changes (docs, config, workflows) are tested as-is.
   pull_request:
     branches:
       - main
-  # Triggered by bot-created PRs (e.g. automated submodule updates from
-  # github-actions[bot]). Using pull_request_target so the workflow fires even
-  # when the PR author is a bot — pull_request is intentionally suppressed by
-  # GitHub for bot authors to prevent infinite loops.
-  # The job condition below ensures this path only runs for bot PRs, so human
-  # PRs are never handled by both triggers at the same time.
-  pull_request_target:
-    branches:
-      - main
+    # Review gh actions docs if you want to further define triggers, paths, etc
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
   workflow_dispatch:
     inputs:
       ref:
@@ -26,53 +17,17 @@ jobs:
   test-deploy:
     name: Test build
     runs-on: ubuntu-latest
-    # For pull_request_target: only run when the PR was opened by the bot.
-    # Human PRs are already covered by the pull_request trigger above, so we
-    # skip them here to avoid double runs and prevent untrusted PR code from
-    # running in the pull_request_target context (which has secrets access).
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'pull_request_target' && github.event.pull_request.user.login == 'github-actions[bot]')
     steps:
-      # For human PRs (pull_request): checks out the PR branch so all changes
-      # are tested, including config and workflow file modifications.
-      # For bot PRs (pull_request_target): checks out main to ensure only
-      # trusted build scripts are executed — the submodule override step below
-      # then injects the new submodule content from the PR.
-      # For manual runs (workflow_dispatch): uses the provided ref or falls
-      # back to main.
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref || (github.event_name == 'pull_request_target' && 'main') || github.sha }}
+          ref: ${{ inputs.ref || github.sha }}
           fetch-depth: 0
           submodules: recursive
-
-      # Only runs for bot PRs (pull_request_target).
-      # Safely injects the new submodule content from the PR without checking
-      # out any PR-branch code: the GitHub API is used to resolve which
-      # submodule changed and to what SHA, then that SHA is fetched directly
-      # from the provider repo. Build scripts always come from main.
-      - name: Override changed submodule with PR content
-        if: github.event_name == 'pull_request_target'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          CHANGED=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files --jq '.[].filename')
-          for path in $CHANGED; do
-            if git submodule status "$path" > /dev/null 2>&1; then
-              NEW_SHA=$(gh api "repos/${{ github.repository }}/contents/${path}?ref=${{ github.event.pull_request.head.sha }}" --jq '.sha')
-              cd "$path"
-              git fetch origin
-              git checkout "$NEW_SHA"
-              cd -
-            fi
-          done
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - name: Install dependencies
         run: npm ci
       - name: Test build website

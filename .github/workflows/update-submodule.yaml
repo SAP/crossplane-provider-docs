@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: write
 
     strategy:
       matrix:
@@ -170,4 +171,17 @@ jobs:
               head: branchName,
               base: 'main',
               draft: false
+            });
+
+      - name: Trigger test build for new PR
+        if: steps.check.outputs.needs_update == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'test-build.yaml',
+              ref: '${{ steps.check.outputs.branch_name }}',
+              inputs: { ref: '${{ steps.check.outputs.branch_name }}' }
             });
