@@ -121,6 +121,12 @@ jobs:
                 state: 'closed'
               });
               console.log(`Closed superseded PR #${existing.number}`);
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${existing.head.ref}`
+              });
+              console.log(`Deleted branch ${existing.head.ref}`);
             }
 
       - name: Create update branch and update submodule
@@ -164,17 +170,4 @@ jobs:
               head: branchName,
               base: 'main',
               draft: false
-            });
-
-      - name: Trigger Test build for new PR
-        if: steps.check.outputs.needs_update == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'test-build.yaml',
-              ref: '${{ steps.check.outputs.branch_name }}',
-              inputs: { ref: '${{ steps.check.outputs.branch_name }}' }
             });
