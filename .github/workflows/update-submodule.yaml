@@ -144,6 +144,7 @@ jobs:
 
       - name: Open pull request
         if: steps.check.outputs.needs_update == 'true'
+        id: open_pr
         uses: actions/github-script@v7
         with:
           script: |
@@ -154,7 +155,7 @@ jobs:
             const branchName = '${{ steps.check.outputs.branch_name }}';
             const docFiles = `${{ steps.check.outputs.doc_files }}`;
 
-            await github.rest.pulls.create({
+            const { data: pr } = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `chore: update ${provider} docs to ${shortSha}`,
@@ -166,18 +167,31 @@ jobs:
                 `**Changed doc files:**`,
                 docFiles.split('\n').map(f => `- \`${f}\``).join('\n'),
                 ``,
-                `Please review the documentation changes before merging.`
+                `## Test results`,
+                ``,
+                `| Test | Status | Run |`,
+                `| ---- | ------ | --- |`,
+                `| Docusaurus build | ⏳ pending | — |`,
+                ``,
+                `> The build test is triggered automatically and will update this table when complete.`
               ].join('\n'),
               head: branchName,
               base: 'main',
               draft: false
             });
+            core.setOutput('pr_number', pr.number);
 
       - name: Trigger test build for new PR
         if: steps.check.outputs.needs_update == 'true'
         uses: actions/github-script@v7
         with:
           script: |
+            // Trigger test-build.yaml via workflow_dispatch on the new branch.
+            // Note: github-actions[bot] PRs do not trigger pull_request events
+            // (GitHub suppresses them to prevent infinite loops), so we must
+            // dispatch the build manually. The result is written back to the PR
+            // body by the update-pr-build-status.yaml workflow, which listens
+            // for this workflow_dispatch run to complete via workflow_run.
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
