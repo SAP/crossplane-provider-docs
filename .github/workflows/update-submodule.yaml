@@ -142,6 +142,64 @@ jobs:
           git commit -m "chore: update ${{ matrix.provider.name }} docs to ${{ steps.check.outputs.short_sha }}"
           git push origin "${{ steps.check.outputs.branch_name }}"
 
+      - name: Trigger test build and wait for result
+        if: steps.check.outputs.needs_update == 'true'
+        id: build
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branchName = '${{ steps.check.outputs.branch_name }}';
+
+            // github-actions[bot] PRs do not trigger pull_request events —
+            // GitHub suppresses them to prevent infinite loops. We dispatch
+            // the build manually and wait for it to finish before opening the
+            // PR, so the PR body already shows the final build status.
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'test-build.yaml',
+              ref: branchName,
+              inputs: { ref: branchName }
+            });
+
+            // Give GitHub 10s to register the run before we start polling.
+            await new Promise(resolve => setTimeout(resolve, 10000));
+
+            // Poll every 20s, up to 30 attempts (10 min total).
+            // A typical Docusaurus build finishes in ~2-3 min.
+            let conclusion = null;
+            let runUrl = null;
+
+            for (let attempt = 0; attempt < 30; attempt++) {
+              const { data: runs } = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'test-build.yaml',
+                branch: branchName,
+                event: 'workflow_dispatch',
+                per_page: 5
+              });
+
+              const run = runs.workflow_runs.find(r => r.status === 'completed' || r.status === 'in_progress' || r.status === 'queued');
+              if (run && run.status === 'completed') {
+                conclusion = run.conclusion;
+                runUrl = run.html_url;
+                console.log(`Build completed: ${conclusion} — ${runUrl}`);
+                break;
+              }
+
+              console.log(`Attempt ${attempt + 1}/30: status=${run?.status ?? 'not found'}, waiting 20s...`);
+              await new Promise(resolve => setTimeout(resolve, 20000));
+            }
+
+            if (!conclusion) {
+              // Timed out after 10 min — open the PR anyway with unknown status.
+              conclusion = 'unknown';
+            }
+
+            core.setOutput('conclusion', conclusion);
+            core.setOutput('run_url', runUrl ?? '');
+
       - name: Open pull request
         if: steps.check.outputs.needs_update == 'true'
         id: open_pr
@@ -154,6 +212,14 @@ jobs:
             const shortSha = '${{ steps.check.outputs.short_sha }}';
             const branchName = '${{ steps.check.outputs.branch_name }}';
             const docFiles = `${{ steps.check.outputs.doc_files }}`;
+            const conclusion = '${{ steps.build.outputs.conclusion }}';
+            const runUrl = '${{ steps.build.outputs.run_url }}';
+
+            const statusIcon = conclusion === 'success' ? '✅ passed'
+              : conclusion === 'failure' ? '❌ failed'
+              : `⚠️ ${conclusion}`;
+
+            const runLink = runUrl ? `[View run](${runUrl})` : '—';
 
             const { data: pr } = await github.rest.pulls.create({
               owner: context.repo.owner,
@@ -171,31 +237,10 @@ jobs:
                 ``,
                 `| Test | Status | Run |`,
                 `| ---- | ------ | --- |`,
-                `| Docusaurus build | ⏳ pending | — |`,
-                ``,
-                `> The build test is triggered automatically and will update this table when complete.`
+                `| Docusaurus build | ${statusIcon} | ${runLink} |`,
               ].join('\n'),
               head: branchName,
               base: 'main',
               draft: false
             });
             core.setOutput('pr_number', pr.number);
-
-      - name: Trigger test build for new PR
-        if: steps.check.outputs.needs_update == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            // Trigger test-build.yaml via workflow_dispatch on the new branch.
-            // Note: github-actions[bot] PRs do not trigger pull_request events
-            // (GitHub suppresses them to prevent infinite loops), so we must
-            // dispatch the build manually. The result is written back to the PR
-            // body by the update-pr-build-status.yaml workflow, which listens
-            // for this workflow_dispatch run to complete via workflow_run.
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'test-build.yaml',
-              ref: '${{ steps.check.outputs.branch_name }}',
-              inputs: { ref: '${{ steps.check.outputs.branch_name }}' }
-            });
