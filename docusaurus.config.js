@@ -52,6 +52,11 @@ const config = {
             'crossplane-provider-btp/!(docs)',
             'crossplane-provider-hana/!(docs)/**',
             'crossplane-provider-hana/!(docs)',
+            // xp-clifford: docs live in README.md at the repo root, not in a docs/ subdirectory.
+            // Exclude all subdirectories and non-documentation .md files.
+            'xp-clifford/*/**',
+            'xp-clifford/CONTRIBUTING.md',
+            'xp-clifford/DEVELOPMENT.md',
           ],
         },
         blog: false,
@@ -102,6 +107,10 @@ const config = {
               {
                 label: 'crossplane-provider-hana',
                 to: '/docs/crossplane-provider-hana/docs/end-user-guides/hana',
+              },
+              {
+                label: 'xp-clifford',
+                to: '/docs/xp-clifford',
               },
             ],
           },
