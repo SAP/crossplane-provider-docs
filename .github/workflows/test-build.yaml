@@ -17,9 +17,6 @@ jobs:
   test-deploy:
     name: Test build
     runs-on: ubuntu-latest
-    # Skip on bot-created PRs — those are tested synchronously by update-submodule.yaml
-    # before the PR is opened, so a second run here would be redundant.
-    if: github.actor != 'github-actions[bot]'
     steps:
       - uses: actions/checkout@v4
         with:
