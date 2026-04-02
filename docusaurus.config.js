@@ -90,11 +90,11 @@ const config = {
               },
               {
                 label: 'crossplane-provider-btp',
-                to: '/docs/crossplane-provider-btp/docs/user/external-name',
+                to: '/docs/crossplane-provider-btp/docs/end-user-guides/import-landscape/external-name',
               },
               {
                 label: 'crossplane-provider-hana',
-                to: '/docs/crossplane-provider-hana/docs/ADR/20250822-hana-x509-authentication',
+                to: '/docs/crossplane-provider-hana/docs/contribution-notes/20250822-hana-x509-authentication',
               },
             ],
           },
