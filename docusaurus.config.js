@@ -52,11 +52,9 @@ const config = {
             'crossplane-provider-btp/!(docs)',
             'crossplane-provider-hana/!(docs)/**',
             'crossplane-provider-hana/!(docs)',
-            // xp-clifford: docs live in README.md at the repo root, not in a docs/ subdirectory.
-            // Exclude all subdirectories and non-documentation .md files.
-            'xp-clifford/*/**',
-            'xp-clifford/CONTRIBUTING.md',
-            'xp-clifford/DEVELOPMENT.md',
+            // xp-clifford: exclude everything except its docs/ subfolder.
+            'xp-clifford/!(docs)/**',
+            'xp-clifford/!(docs)',
           ],
         },
         blog: false,
@@ -110,7 +108,7 @@ const config = {
               },
               {
                 label: 'xp-clifford',
-                to: '/docs/xp-clifford',
+                to: '/docs/xp-clifford/docs/end-user-guides/overview',
               },
             ],
           },
@@ -134,7 +132,7 @@ const config = {
 
   // Each submodule's docs/ directory is added so that images in docs/img/ are served at /img/...
   // To add a new submodule, append its docs path, e.g. 'docs/crossplane-provider-xyz/docs'
-  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs'],
+    staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs'],
 };
 
 module.exports = config;
