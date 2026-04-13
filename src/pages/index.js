@@ -46,10 +46,10 @@ export default function Home() {
                   <a href="/crossplane-provider-docs/docs/contribution/understand-providers">Contribution</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user-stories/account/subaccount">crossplane-provider-btp</a>
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/end-user-guides/btp">crossplane-provider-btp</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/user-stories/setup">crossplane-provider-hana</a>
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/setup">crossplane-provider-hana</a>
                 </div>
               </div>
             </div>
@@ -160,13 +160,13 @@ export default function Home() {
           </Link>
           <span>
             or explore{" "}
-            <Link to="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/user-stories/btp">
+            <Link to="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/end-user-guides/btp">
               our crossplane provider for SAP BTP
             </Link>
           </span>
           <span>
             or explore{" "}
-            <Link to="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/user-stories/setup">
+            <Link to="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/setup">
               our crossplane provider for SAP HANA
             </Link>
           </span>
