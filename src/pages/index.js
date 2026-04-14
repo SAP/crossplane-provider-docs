@@ -49,7 +49,7 @@ export default function Home() {
                   <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/end-user-guides/btp">crossplane-provider-btp</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/setup">crossplane-provider-hana</a>
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/hana">crossplane-provider-hana</a>
                 </div>
               </div>
             </div>
