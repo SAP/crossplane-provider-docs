@@ -18,8 +18,15 @@ const config = {
   organizationName: 'SAP',
   projectName: 'crossplane-provider-docs',
 
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'throw',
+  onBrokenAnchors: 'throw',
+  onDuplicateRoutes: 'throw',
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
 
   i18n: {
     defaultLocale: 'en',
