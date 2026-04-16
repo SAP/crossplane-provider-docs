@@ -105,6 +105,10 @@ const config = {
                 label: 'crossplane-provider-hana',
                 to: '/docs/crossplane-provider-hana/docs/end-user-guides/hana',
               },
+              {
+                label: 'crossplane-provider-cloudfoundry',
+                to: '/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry',
+              },
             ],
           },
           {
