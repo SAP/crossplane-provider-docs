@@ -51,6 +51,9 @@ export default function Home() {
                 <div className="action medium alt">
                   <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/hana">crossplane-provider-hana</a>
                 </div>
+                <div className="action medium alt">
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry">crossplane-provider-cloudfoundry</a>
+                </div>
               </div>
             </div>
           </div>
@@ -168,6 +171,12 @@ export default function Home() {
             or explore{" "}
             <Link to="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/setup">
               our crossplane provider for SAP HANA
+            </Link>
+          </span>
+          <span>
+            or explore{" "}
+            <Link to="/crossplane-provider-docs/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry">
+              our crossplane provider for Cloud Foundry
             </Link>
           </span>
         </section>
