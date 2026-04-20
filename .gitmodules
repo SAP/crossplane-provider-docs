@@ -4,6 +4,9 @@
 [submodule "docs/crossplane-provider-hana"]
 	path = docs/crossplane-provider-hana
 	url = https://github.com/SAP/crossplane-provider-hana.git
+[submodule "docs/crossplane-provider-cloudfoundry"]
+	path = docs/crossplane-provider-cloudfoundry
+	url = https://github.com/SAP/crossplane-provider-cloudfoundry.git
 [submodule "docs/xp-clifford"]
 	path = docs/xp-clifford
 	url = https://github.com/SAP/xp-clifford.git

@@ -33,6 +33,9 @@ jobs:
           - name: crossplane-provider-hana
             repo: SAP/crossplane-provider-hana
             submodule_path: docs/crossplane-provider-hana
+          - name: crossplane-provider-cloudfoundry
+            repo: SAP/crossplane-provider-cloudfoundry
+            submodule_path: docs/crossplane-provider-cloudfoundry
 
     steps:
       - name: Checkout docs repo

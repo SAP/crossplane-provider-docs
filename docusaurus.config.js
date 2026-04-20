@@ -52,6 +52,8 @@ const config = {
             'crossplane-provider-btp/!(docs)',
             'crossplane-provider-hana/!(docs)/**',
             'crossplane-provider-hana/!(docs)',
+            'crossplane-provider-cloudfoundry/!(docs)/**',
+            'crossplane-provider-cloudfoundry/!(docs)',
             // xp-clifford: exclude everything except its docs/ subfolder.
             'xp-clifford/!(docs)/**',
             'xp-clifford/!(docs)',
@@ -107,6 +109,10 @@ const config = {
                 to: '/docs/crossplane-provider-hana/docs/end-user-guides/hana',
               },
               {
+                label: 'crossplane-provider-cloudfoundry',
+                to: '/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry',
+              },
+              {
                 label: 'xp-clifford',
                 to: '/docs/xp-clifford/docs/end-user-guides/overview',
               },
@@ -132,7 +138,7 @@ const config = {
 
   // Each submodule's docs/ directory is added so that images in docs/img/ are served at /img/...
   // To add a new submodule, append its docs path, e.g. 'docs/crossplane-provider-xyz/docs'
-    staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs'],
+  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs', 'docs/crossplane-provider-cloudfoundry/docs'],
 };
 
 module.exports = config;
