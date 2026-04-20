@@ -54,6 +54,9 @@ const config = {
             'crossplane-provider-hana/!(docs)',
             'crossplane-provider-cloudfoundry/!(docs)/**',
             'crossplane-provider-cloudfoundry/!(docs)',
+            // xp-clifford: exclude everything except its docs/ subfolder.
+            'xp-clifford/!(docs)/**',
+            'xp-clifford/!(docs)',
           ],
         },
         blog: false,
@@ -108,6 +111,10 @@ const config = {
               {
                 label: 'crossplane-provider-cloudfoundry',
                 to: '/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry',
+              },
+              {
+                label: 'xp-clifford',
+                to: '/docs/xp-clifford/docs/end-user-guides/overview',
               },
             ],
           },
