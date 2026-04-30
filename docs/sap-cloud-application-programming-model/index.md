@@ -6,9 +6,9 @@ sidebar_position: 0
 
 ## Introduction
 
-This guide covers how to orchestrate the infrastructure required to deploy a SAP CAP application with a SAP HANA Cloud database to a Cloud Foundry environment on SAP BTP  — using Infrastructure as Data.
+This guide covers how to orchestrate the infrastructure required to deploy a SAP CAP application with a SAP HANA Cloud database to a Cloud Foundry environment on SAP BTP — using Infrastructure as Data.
 
-> "The *Cloud Application Programming Model* (CAP) is a framework of languages, libraries, and tools for building enterprise-grade cloud applications." - https://cap.cloud.sap/docs/get-started/features#what-is-cap
+> "The _Cloud Application Programming Model_ (CAP) is a framework of languages, libraries, and tools for building enterprise-grade cloud applications." - https://cap.cloud.sap/docs/get-started/features#what-is-cap
 
 Rather than repeating what the individual Crossplane provider docs already cover, it links to the relevant sections and adds additional context where needed.
 
