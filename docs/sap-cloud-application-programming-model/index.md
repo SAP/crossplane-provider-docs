@@ -10,7 +10,7 @@ This guide walks through deploying the [cloud-cap-samples-java](https://github.c
 
 > "The _Cloud Application Programming Model_ (CAP) is a framework of languages, libraries, and tools for building enterprise-grade cloud applications." - https://cap.cloud.sap/docs/get-started/features#what-is-cap
 
-Rather than repeating what the individual Crossplane provider docs already cover, it links to the relevant sections and adds additional context where needed.
+Rather than repeating what the individual Crossplane provider documentation already covers, it links to the relevant sections and adds additional context where needed.
 
 :::info
 cloud-cap-samples-java can also be [deployed to a Kyma runtime on SAP BTP](https://github.com/SAP-samples/cloud-cap-samples-java#deploy-to-sap-business-technology-platform-kyma-runtime). This is not yet covered in this guide. Please don't hesitate to [contribute](/docs/contribution/solve-tickets#shared-documentation)!
@@ -36,17 +36,17 @@ cloud-cap-samples-java can also be [deployed to a Kyma runtime on SAP BTP](https
 11. [Install](/docs/crossplane-provider-hana/docs/end-user-guides/setup#install-provider) and [configure](/docs/crossplane-provider-hana/docs/end-user-guides/setup#configure-providerconfig) the HANA provider
 12. [Create a HANA instance mapping (Cloud Foundry)](/docs/crossplane-provider-hana/docs/end-user-guides/instance-mapping#get-access-to-the-admin-api)
 13. [Assign](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#manage-user-roles) the "SpaceDeveloper" role to the user you want to deploy the CAP application with
-14. Deployment: _Work in progress_, for now follow [this section in cloud-cap-samples-java](https://github.com/SAP-samples/cloud-cap-samples-java#deploy-to-sap-business-technology-platform-cloud-foundry)
+14. Deployment: _Work in progress_, follow ["Deploy to SAP Business Technology Platform, Cloud Foundry"](https://github.com/SAP-samples/cloud-cap-samples-java#deploy-to-sap-business-technology-platform-cloud-foundry) for now
 
 ## Result
 
-The CAP application is now deployed in a Cloud Foundry environment on SAP BTP and can be accessed via the SAP BTP Cockpit. All underlying infrastructure is managed as data.
+The CAP application is now successfully deployed in a Cloud Foundry environment on SAP BTP. All underlying infrastructure is managed as data. Changes to this infrastructure can be made by updating the Kubernetes manifests rather than clicking through the SAP BTP cockpit or running manual CLI commands. 🚀
 
 ## References
 
 - [Deploy to Cloud Foundry guide in CAP documentation](https://cap.cloud.sap/docs/guides/deploy/to-cf)
 - [Deploy to Kyma guide in CAP documentation](https://cap.cloud.sap/docs/guides/deploy/to-kyma)
-- [Set Up Schema or HDI Container (Cloud Foundry)](https://help.sap.com/docs/hana-cloud/sap-hana-cloud-getting-started-guide/set-up-schema-or-hdi-container-cloud-foundry?locale=en-US&version=LATEST)
+- [Set Up Schema or HDI Container (Cloud Foundry) in SAP Help Portal](https://help.sap.com/docs/hana-cloud/sap-hana-cloud-getting-started-guide/set-up-schema-or-hdi-container-cloud-foundry?locale=en-US&version=LATEST)
 
 ## ⁉ FAQs
 
