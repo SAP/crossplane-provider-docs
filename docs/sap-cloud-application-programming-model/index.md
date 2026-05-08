@@ -25,17 +25,17 @@ cloud-cap-samples-java can also be [deployed to a Kyma runtime on SAP BTP](https
 
 1. [Install](/docs/crossplane-provider-btp/docs/end-user-guides/setup/install-provider-btp#procedure) and [configure](/docs/crossplane-provider-btp/docs/end-user-guides/setup/configure-provider-btp#set-up-the-sap-cloud-management-service) the BTP provider
 2. [Create and set up a subaccount](/docs/crossplane-provider-btp/docs/end-user-guides/account/subaccount)
-3. [Create a SAP HANA Cloud service instance](/docs/crossplane-provider-btp/docs/end-user-guides/services/create-services#service-instance)
-4. [Create a service binding for the SAP HANA Cloud service instance](/docs/crossplane-provider-btp/docs/end-user-guides/services/consume-service#create-a-servicebinding)
-5. [Create an entitlement for HDI containers](/docs/crossplane-provider-btp/docs/end-user-guides/services/create-services#create-an-entitlement) (`serviceName: hana` and `servicePlanName: hdi-shared`)
-6. [Create an application runtime entitlement](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/deploy-workload-provider-cf#prerequisites-application-runtime-quota)
-7. [Create a Cloud Foundry environment](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/order-cf-environment#create-cloudfoundryenvironment-)
-8. [Install](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#install-cloudfoundry-provider) and [configure](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#configure-connection-details) the Cloud Foundry provider
-9. [Import the organization](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#import-organization-)
-10. [Create a space](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#create-spaces-)
-11. [Install](/docs/crossplane-provider-hana/docs/end-user-guides/setup#install-provider) and [configure](/docs/crossplane-provider-hana/docs/end-user-guides/setup#configure-providerconfig) the HANA provider
-12. [Create a HANA instance mapping (Cloud Foundry)](/docs/crossplane-provider-hana/docs/end-user-guides/instance-mapping#get-access-to-the-admin-api)
-13. [Assign](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#manage-user-roles) the "SpaceDeveloper" role to the user you want to deploy the CAP application with
+3. [Create a Cloud Foundry environment](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/order-cf-environment#create-cloudfoundryenvironment-)
+4. [Install](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#install-cloudfoundry-provider) and [configure](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#configure-connection-details) the Cloud Foundry provider
+5. [Import the organization](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#import-organization-)
+6. [Create a space](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#create-spaces-)
+7. [Assign](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#manage-user-roles) the "SpaceDeveloper" role to the user you want to deploy the CAP application with
+8. [Create an application runtime entitlement](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/deploy-workload-provider-cf#prerequisites-application-runtime-quota)
+9. [Create an entitlement for HDI containers](/docs/crossplane-provider-btp/docs/end-user-guides/services/create-services#create-an-entitlement) (`serviceName: hana` and `servicePlanName: hdi-shared`)
+10. [Create a SAP HANA Cloud service instance](/docs/crossplane-provider-btp/docs/end-user-guides/services/create-services#service-instance)
+11. [Create a service binding for the SAP HANA Cloud service instance](/docs/crossplane-provider-btp/docs/end-user-guides/services/consume-service#create-a-servicebinding)
+12. [Install](/docs/crossplane-provider-hana/docs/end-user-guides/setup#install-provider) and [configure](/docs/crossplane-provider-hana/docs/end-user-guides/setup#configure-providerconfig) the HANA provider
+13. [Create a HANA instance mapping (Cloud Foundry)](/docs/crossplane-provider-hana/docs/end-user-guides/instance-mapping#get-access-to-the-admin-api)
 14. Deployment: _Work in progress_, follow ["Deploy to SAP Business Technology Platform, Cloud Foundry"](https://github.com/SAP-samples/cloud-cap-samples-java#deploy-to-sap-business-technology-platform-cloud-foundry) for now
 
 ## Result
