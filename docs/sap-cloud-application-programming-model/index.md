@@ -43,78 +43,78 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-    namespace: default
-    name: cis-provider-secret
+  namespace: default
+  name: cis-provider-secret
 type: Opaque
 stringData:
-    data: |
-        {
-          "endpoints": {
-            "accounts_service_url": "...",
-            "cloud_automation_url": "...",
-            "entitlements_service_url": "...",
-            "events_service_url": "...",
-            "external_provider_registry_url": "...",
-            "metadata_service_url": "...",
-            "order_processing_url": "...",
-            "provisioning_service_url": "...",
-            "saas_registry_service_url": "..."
-          },
-          "grant_type": "client_credentials",
-          "sap.cloud.service": "com.sap.core.commercial.service.central",
-          "uaa": {
-            "apiurl": "...",
-            "clientid": "...",
-            "clientsecret": "...",
-            "credential-type": "binding-secret",
-            "identityzone": "...",
-            "identityzoneid": "...",
-            "sburl": "...",
-            "subaccountid": "...",
-            "tenantid": "...",
-            "tenantmode": "shared",
-            "uaadomain": "...",
-            "url": "...",
-            "verificationkey": "...",
-            "xsappname": "...",
-            "xsmasterappname": "...",
-            "zoneid": "..."
-          }
-        }
+  data: |
+    {
+      "endpoints": {
+        "accounts_service_url": "...",
+        "cloud_automation_url": "...",
+        "entitlements_service_url": "...",
+        "events_service_url": "...",
+        "external_provider_registry_url": "...",
+        "metadata_service_url": "...",
+        "order_processing_url": "...",
+        "provisioning_service_url": "...",
+        "saas_registry_service_url": "..."
+      },
+      "grant_type": "client_credentials",
+      "sap.cloud.service": "com.sap.core.commercial.service.central",
+      "uaa": {
+        "apiurl": "...",
+        "clientid": "...",
+        "clientsecret": "...",
+        "credential-type": "binding-secret",
+        "identityzone": "...",
+        "identityzoneid": "...",
+        "sburl": "...",
+        "subaccountid": "...",
+        "tenantid": "...",
+        "tenantmode": "shared",
+        "uaadomain": "...",
+        "url": "...",
+        "verificationkey": "...",
+        "xsappname": "...",
+        "xsmasterappname": "...",
+        "zoneid": "..."
+      }
+    }
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-    namespace: default
-    name: sa-provider-secret
+  namespace: default
+  name: sa-provider-secret
 type: Opaque
 stringData:
-    credentials: |
-        {
-          "email": "<technical-user-email>",
-          "username": "<technical-user-username>",
-          "password": "<technical-user-password>"
-        }
+  credentials: |
+    {
+      "email": "<technical-user-email>",
+      "username": "<technical-user-username>",
+      "password": "<technical-user-password>"
+    }
 ---
 apiVersion: btp.sap.crossplane.io/v1alpha1
 kind: ProviderConfig
 metadata:
-    name: account-provider-config
+  name: account-provider-config
 spec:
-    globalAccount: <global-account-subdomain>
-    cliServerUrl: https://cli.btp.cloud.sap
-    cisCredentials:
-        secretRef:
-            name: cis-provider-secret
-            namespace: default
-            key: data
-        source: Secret
-    serviceAccountSecret:
-        secretRef:
-            key: credentials
-            name: sa-provider-secret
-            namespace: default
-        source: Secret
+  globalAccount: <global-account-subdomain>
+  cliServerUrl: https://cli.btp.cloud.sap
+  cisCredentials:
+    secretRef:
+      name: cis-provider-secret
+      namespace: default
+      key: data
+    source: Secret
+  serviceAccountSecret:
+    secretRef:
+      key: credentials
+      name: sa-provider-secret
+      namespace: default
+    source: Secret
 ```
 
 </details>
@@ -137,7 +137,7 @@ spec:
     region: eu12 # Adjust if needed
     subaccountAdmins:
       - <admin-email> # Use the email address of your technical user
-    subdomain: <subaccount-subdomain>  # This value must be unique across all BTP subaccounts
+    subdomain: <subaccount-subdomain> # This value must be unique across all BTP subaccounts
     usedForProduction: "NOT_USED_FOR_PRODUCTION" # Other supported values are "USED_FOR_PRODUCTION" and "UNSET"
   providerConfigRef:
     name: account-provider-config
@@ -197,14 +197,14 @@ spec:
 <summary>`CloudFoundryEnvironment`</summary>
 
 ```yaml
-apiVersion: environment.btp.sap.crossplane.io/v1alpha1  
+apiVersion: environment.btp.sap.crossplane.io/v1alpha1
 kind: CloudFoundryEnvironment
 metadata:
   name: cf-env
 spec:
   forProvider:
     initialOrgManagers:
-      - technical-user@example.com 
+      - technical-user@example.com
     landscape: cf-eu12
     orgName: test-eu12
     environmentName: cf-test-eu12
@@ -213,7 +213,7 @@ spec:
   subaccountRef:
     name: my-subaccount
   writeConnectionSecretToRef:
-    name: cf-environment-secret # Secret containing connection details including apiEnpoint of the created cloudfoundry environment. 
+    name: cf-environment-secret # Secret containing connection details including apiEnpoint of the created cloudfoundry environment.
     namespace: default
 ```
 
@@ -235,29 +235,29 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-    name: cf-credentials-secret
-    namespace: default
+  name: cf-credentials-secret
+  namespace: default
 type: Opaque
 stringData:
-    credentials: |
-        {
-        "email": "<your email>",
-        "username": "<technical-user-name>",
-        "password": "<technical-user-password>"
-        }
+  credentials: |
+    {
+    "email": "<your email>",
+    "username": "<technical-user-name>",
+    "password": "<technical-user-password>"
+    }
 ---
 apiVersion: cloudfoundry.crossplane.io/v1beta1
 kind: ProviderConfig
 metadata:
-    name: default
+  name: default
 spec:
-    apiEndpoint: https://api.cf.eu12.hana.ondemand.com/
-    credentials:
-        source: Secret
-        secretRef:
-            name: cf-credentials-secret
-            namespace: default
-            key: credentials
+  apiEndpoint: https://api.cf.eu12.hana.ondemand.com/
+  credentials:
+    source: Secret
+    secretRef:
+      name: cf-credentials-secret
+      namespace: default
+      key: credentials
 ```
 
 </details>
@@ -297,7 +297,7 @@ spec:
     allowSsh: true
     name: my-space
     orgRef:
-      name:  my-org ## The managed resource name of the Organization in the control plane
+      name: my-org ## The managed resource name of the Organization in the control plane
 ```
 
 </details>
@@ -315,7 +315,7 @@ metadata:
 spec:
   forProvider:
     type: Developer # valid role types are: Developer, Supporter, Auditor, Manager
-    username: user1@example.com 
+    username: user1@example.com
     spaceRef:
       name: my-space
 ```
@@ -328,7 +328,7 @@ spec:
 <summary>`Entitlement`</summary>
 
 ```yaml
-apiVersion: account.btp.sap.crossplane.io/v1alpha1 
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
 kind: Entitlement
 metadata:
   name: cf-quota
@@ -463,13 +463,13 @@ type: Opaque
 data:
   endpoint: abcdefgh-base64-encoded-xyz== # E.g. Base64-encode: my-hana-domain.prod-eu10.hanacloud.ondemand.com
   port: NDQz # E.g. Base64-encode: 443
-  username: REJBRE1JTg== # E.g. Base64-encode: DBADMIN 
+  username: REJBRE1JTg== # E.g. Base64-encode: DBADMIN
   password: Q2xvdWQtMTIzNDUh # Same password as set during service instance creation E.g. Base64-encode: Cloud-12345!
 ---
 apiVersion: hana.sap.crossplane.io/v1alpha1
 kind: ProviderConfig
 metadata:
-    name: hana-providerconfig
+  name: hana-providerconfig
 spec:
   credentials:
     source: Secret
