@@ -10,7 +10,7 @@ This guide walks through deploying the [cloud-cap-samples-java](https://github.c
 
 > "The _Cloud Application Programming Model_ (CAP) is a framework of languages, libraries, and tools for building enterprise-grade cloud applications." - https://cap.cloud.sap/docs/get-started/features#what-is-cap
 
-Rather than repeating what the individual Crossplane provider documentation already covers, it links to the relevant sections and adds additional context where needed.
+Rather than repeating what the individual Crossplane provider documentation already covers, it links to the relevant sections and adds additional context where needed. For convenience, each step includes a collapsible section with example YAML resources taken directly from the referenced documentation.
 
 :::info
 cloud-cap-samples-java can also be [deployed to a Kyma runtime on SAP BTP](https://github.com/SAP-samples/cloud-cap-samples-java#deploy-to-sap-business-technology-platform-kyma-runtime). This is not yet covered in this guide. Please don't hesitate to [contribute](/docs/contribution/solve-tickets#shared-documentation)!
@@ -173,7 +173,7 @@ spec:
 apiVersion: account.btp.sap.crossplane.io/v1alpha1
 kind: CloudManagement
 metadata:
-  name: my-subaccount-cis
+  name: cis-local
 spec:
   writeConnectionSecretToRef:
     name: cis-local
@@ -601,7 +601,7 @@ spec:
 
 ### Deployment
 
-14. _Work in progress_, follow ["Deploy to SAP Business Technology Platform, Cloud Foundry"](https://github.com/SAP-samples/cloud-cap-samples-java#deploy-to-sap-business-technology-platform-cloud-foundry) for now
+14. _Work in progress_. Follow ["Deploy to SAP Business Technology Platform, Cloud Foundry"](https://github.com/SAP-samples/cloud-cap-samples-java#deploy-to-sap-business-technology-platform-cloud-foundry) for now. If you have [`@sap/cds-dk`](https://cap.cloud.sap/docs/tools/cds-cli) installed, you can use `cds up` to automate multiple steps including `mbt build` and `cf deploy`.
 
 ## Result
 
