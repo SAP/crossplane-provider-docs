@@ -6,8 +6,21 @@ on:
   workflow_dispatch:       # Manual trigger for testing
 
 jobs:
+  # Gate job: only runs for workflow_dispatch and requires approval.
+  # Skipped automatically for schedule runs so the daily job is never blocked.
+  approval-gate:
+    name: Require approval for manual trigger
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: manual-trigger-approval
+    permissions: {}
+    steps:
+      - run: echo "Approved — proceeding with submodule update."
+
   check-and-update:
     name: Check for doc changes and update submodule
+    needs: approval-gate
+    if: always() && (needs.approval-gate.result == 'success' || needs.approval-gate.result == 'skipped')
     runs-on: ubuntu-latest
     permissions:
       contents: write
