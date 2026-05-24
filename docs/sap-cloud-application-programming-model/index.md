@@ -25,6 +25,8 @@ cloud-cap-samples-java can also be [deployed to a Kyma runtime on SAP BTP](https
 
 ### BTP
 
+Before we can provision a Cloud Foundry environment and a SAP HANA Cloud service instance, we need to set up the required resources on the BTP side, such as a subaccount and the corresponding entitlements.
+
 1. [Install](/docs/crossplane-provider-btp/docs/end-user-guides/setup/install-provider-btp#procedure) and [configure](/docs/crossplane-provider-btp/docs/end-user-guides/setup/configure-provider-btp#set-up-the-sap-cloud-management-service) the BTP provider
 
 <details>
@@ -191,6 +193,8 @@ spec:
 
 ### Cloud Foundry
 
+With the resources created on the BTP side, we can now provision a Cloud Foundry environment and the space we will later deploy the CAP application to.
+
 3. [Create a Cloud Foundry environment](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/order-cf-environment#create-cloudfoundryenvironment-)
 
 <details>
@@ -344,6 +348,8 @@ spec:
 </details>
 
 ### HANA
+
+Based on our BTP and Cloud Foundry setup, we can now create a SAP HANA Cloud service instance and map it to the space so that our CAP application can create HDI containers in it.
 
 9. [Create an entitlement for HDI containers](/docs/crossplane-provider-btp/docs/end-user-guides/services/create-services#create-an-entitlement) (`serviceName: hana` and `servicePlanName: hdi-shared`)
 
