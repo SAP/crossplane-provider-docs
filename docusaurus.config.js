@@ -43,7 +43,6 @@ const config = {
           routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
           sidebarCollapsible: true,
-          autoCollapseSidebarCategories: true,
           remarkPlugins: [remarkDirective, remarkImageLight],
           exclude: [
             // Exclude everything in a submodule except its docs/ subfolder.
@@ -154,6 +153,11 @@ const config = {
       prism: {
         theme: require('prism-react-renderer').themes.github,
         darkTheme: require('prism-react-renderer').themes.dracula,
+      },
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
+        },
       },
     }),
 
