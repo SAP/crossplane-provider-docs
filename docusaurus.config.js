@@ -99,7 +99,7 @@ const config = {
             label: 'CloudFoundry',
           },
           {
-            to: '/docs/contribution/understand-providers',
+            to: '/docs/get-started/understand-providers',
             position: 'left',
             label: 'Contribute',
           },
@@ -118,7 +118,7 @@ const config = {
             items: [
               {
                 label: 'Contribution',
-                to: '/docs/contribution/understand-providers',
+                to: '/docs/get-started/understand-providers',
               },
               {
                 label: 'crossplane-provider-btp',

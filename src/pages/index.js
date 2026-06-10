@@ -52,7 +52,7 @@ export default function Home() {
                   <a href="/crossplane-provider-docs/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry" style={{ backgroundColor: "#00144A", color: "#ffffff" }}>CloudFoundry</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/contribution/understand-providers" style={{ backgroundColor: "#450B00", color: "#ffffff" }}>Contribute</a>
+                  <a href="/crossplane-provider-docs/docs/get-started/understand-providers" style={{ backgroundColor: "#450B00", color: "#ffffff" }}>Contribute</a>
                 </div>
               </div>
               <a href="https://open-control-plane.io" style={{ color: "inherit", opacity: 0.6, fontSize: "13px", textDecoration: "underline" }}>Bring Crossplane to your organization</a>
@@ -158,7 +158,7 @@ export default function Home() {
         <section className="get-started-section gray-white">
           <Link
             className="button button--primary button--lg"
-            to="/crossplane-provider-docs/docs/contribution/understand-providers"
+            to="/crossplane-provider-docs/docs/get-started/understand-providers"
           >
             Start contributing
           </Link>
@@ -212,7 +212,7 @@ export default function Home() {
               </Link>
               <br />
               <span>
-                and learn <Link to="/crossplane-provider-docs/docs/contribution/understand-providers">how to contribute</Link>
+                and learn <Link to="/crossplane-provider-docs/docs/get-started/understand-providers">how to contribute</Link>
               </span>
               <br />
               <br />
