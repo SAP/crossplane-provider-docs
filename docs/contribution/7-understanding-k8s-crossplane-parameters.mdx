@@ -42,15 +42,17 @@ Everything else — timeouts, backoff, jitter, leader election — is fixed at t
 - **GlobalRateLimiter (RPS)** — token-bucket rate, set to the same value as N
 - **QPS/Burst (client-go)** — HTTP rate to Kubernetes API, set to N×5 / N×10
 
+> **Note:** The coupling of these three concerns into one flag is a known design issue. A proposal to split them into separate flags exists in [crossplane-provider-btp#654](https://github.com/SAP/crossplane-provider-btp/pull/654).
+
 **Default:** Provider-specific ([BTP: 3](https://github.com/SAP/crossplane-provider-btp/blob/main/cmd/provider/main.go#L50), [CF: 10](https://github.com/SAP/crossplane-provider-cloudfoundry/blob/main/cmd/provider/main.go#L42), [HANA: 10](https://github.com/SAP/crossplane-provider-hana/blob/main/cmd/provider/main.go#L43), others: 100)
 
 <details>
 <summary>How it works</summary>
 
 - Each controller spawns exactly N workers (fixed count, not elastic)
-- A token-bucket rate limiter (RPS = N) gates every reconcile — if no token is available, the item is requeued
+- A token-bucket rate limiter (RPS = N) gates every reconcile — if no token is available, the item is requeued. Exception: if an item was already requeued before, it executes without consuming a token to prevent infinite requeue loops
 - Each reconcile makes ~5–10 KubeAPI calls; QPS is set to N×5 and Burst to N×10 automatically
-- Bottleneck is typically I/O wait, not CPU — concurrency can safely exceed CPU cores
+- Bottleneck is typically I/O (network) wait, not CPU — concurrency can safely exceed CPU cores
 
 <Tabs>
   <TabItem value="upjet" label="upjet/Terraform">
@@ -64,15 +66,17 @@ Everything else — timeouts, backoff, jitter, leader election — is fixed at t
 </details>
 
 :::tip Tuning
-- **Small** landscape ({'<' + '100'} resources): 1–5
+- **Small** landscape (< 100 resources): 1–5
 - **Medium** landscape (100–500): 5–10
 - **Large** landscape (500–2000): 10–20
 - **XL** landscape (2000+): 20+
+
+Higher concurrency increases the number of concurrent API requests to both external and Kubernetes APIs. Watch for rate limit errors when raising this value — especially burst limits on the KubeAPI server, which enforces per-client constraints.
 :::
 
 ### `--poll-interval`
 
-**What it controls:** How often external state is checked for drift.
+**What it controls:** How often a successfully-reconciled resource (not in error state) is re-checked for drift.
 
 **Default:** 1 minute (most providers)
 
@@ -86,19 +90,19 @@ Everything else — timeouts, backoff, jitter, leader election — is fixed at t
 </details>
 
 :::tip Tuning
-- **Small** ({'<' + '100'}): 1 minute
+- **Small** (< 100): 1 minute
 - **Medium** (100–500): 1–5 minutes
 - **Large** (500–2000): 3–5 minutes
 - **XL** (2000+): 5–10 minutes
 :::
 
-> **Jitter note:** BTP and CF providers have no built-in jitter. Without jitter, all resources requeue simultaneously after a restart. For large landscapes (500+), consider raising the poll interval to spread the load naturally, or open an issue to request jitter support.
+> **Jitter note:** BTP and CF providers have no built-in jitter. Without jitter, all resources requeue simultaneously after a restart, creating a load spike. There is no disadvantage to enabling jitter — it only reduces burst load, which is especially beneficial when controllers are shared across teams. See [Contribution Options](#contribution-options) to add jitter support.
 
 ### Tuning by Landscape Size
 
 | Resources | --max-reconcile-rate | --poll-interval | QPS / Burst (auto) | Notes |
 |-----------|---------------------|-----------------|---------------------|-------|
-| **{'<' + '100'}** | 1–5 | 1m | 25 / 50 | Defaults are fine |
+| **< 100** | 1–5 | 1m | 25 / 50 | Defaults are fine |
 | **100–500** | 5–10 | 1–5m | 50 / 100 | CF default (10) reasonable |
 | **500–2000** | 10–20 | 3–5m | 150 / 300 | Must stay below external API limits |
 | **2000+** | 20+ | 5–10m | 250 / 500 | External APIs bottleneck; consider sharding |
@@ -116,13 +120,14 @@ As a provider contributor, you can change or expose the following that end users
 
 | What | How | Impact |
 |------|-----|--------|
+| **Decouple `--max-reconcile-rate`** | Split into separate flags for concurrency, RPS, and QPS (see [BTP#654](https://github.com/SAP/crossplane-provider-btp/pull/654)) | Lets operators tune each dimension independently |
 | **Change default `--max-reconcile-rate`** | Adjust the default in the provider's `main.go` | Affects all deployments that don't override the flag |
 | **Change default `--poll-interval`** | Adjust the default in the provider's `main.go` | Reduces steady-state API load for existing deployments |
-| **Add poll jitter** | Implement `PollJitterPercent` in the controller setup | Critical for BTP and CF on large landscapes |
+| **Add poll jitter** | Implement `PollJitterPercent` in the controller setup | No downside — reduces burst load, especially on shared controllers |
 | **Expose reconcile timeout as a flag** | Replace hardcoded `time.Minute` with a CLI flag | Lets operators handle slow external APIs without a code change |
 | **Change backoff values** | Override `RateLimiterWithContext` in controller setup | Useful when transient errors cause excessive 60s waits |
-| **Disable/tune leader election** | Pass `LeaderElection: false` or adjust lease durations | Reduces KubeAPI overhead for single-replica deployments |
-| **Adjust QPS/Burst multipliers** | Change the N×5 / N×10 formula in client config | Useful if a provider's reconcile call profile differs significantly |
+| **Disable/tune leader election** | Pass `LeaderElection: false` or adjust lease durations | HA is unnecessary for most use cases — reconciliation runs on poll intervals, pod restarts are not critical |
+| **Adjust QPS/Burst multipliers** | Change the N×5 / N×10 formula in client config | Raise QPS if rate-limited by KubeAPI, but monitor API server load — it enforces per-client limits |
 
 ---
 
@@ -142,10 +147,11 @@ As a provider contributor, you can change or expose the following that end users
 ### Common Pitfalls
 
 1. **Ignoring external API limits** — Setting internal RPS higher than external API capacity generates 429 errors and spurious backoff
-2. **No poll jitter on large landscapes** — All resources requeue simultaneously after restart; raise poll interval to compensate
+2. **No poll jitter on large landscapes** — All resources requeue simultaneously after restart; raise poll interval to compensate or add jitter
 3. **Coupled concurrency and RPS** — BTP (upjet) needs MaxConc=1; go-sdk providers can safely run higher
 4. **Ignoring 429 handling** — Neither BTP nor CF providers parse rate-limit headers; 429s trigger generic backoff
 5. **Underestimating KubeAPI calls** — Each reconcile makes ~5–10 KubeAPI calls; QPS must be 5×–10× RPS
+6. **Setting GlobalRateLimiter too low** — Items that were previously requeued bypass the token check; a very low RPS effectively becomes useless as requeued items accumulate
 
 ---
 
