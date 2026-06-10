@@ -17,7 +17,7 @@ We investigated this in the context of our SAP providers — [crossplane-provide
 
 Depending on your role, jump to the relevant section:
 - **[End-user Options](#end-user-options)** — tune your deployment via CLI flags
-- **[Contribution Possibilities](#contribution-possibilities)** — change defaults or expose new flags in provider code
+- **[Contribution Options](#contribution-options)** — change defaults or expose new flags in provider code
 
 :::info
 Scaling the external API itself is not an option in most cases and is therefore out of scope — it is the ceiling you tune against.
@@ -27,7 +27,7 @@ Scaling the external API itself is not an option in most cases and is therefore 
 
 As an operator deploying a Crossplane provider, **you can tune the following flags on the provider's `Deployment` or via a `DeploymentRuntimeConfig`**:
 
-Everything else — timeouts, backoff, jitter, leader election — is fixed at the values set by the provider developer. If defaults don't work for your scale, see [Contribution Possibilities](#contribution-possibilities).
+Everything else — timeouts, backoff, jitter, leader election — is fixed at the values set by the provider developer. If defaults don't work for your scale, see [Contribution Options](#contribution-options).
 
 | Flag | What it changes | When to touch it |
 |------|----------------|-----------------|
