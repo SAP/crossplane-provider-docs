@@ -40,21 +40,22 @@ export default function Home() {
               <span className="name clip">Crossplane Provider Docs</span>
               <span className="text">Stop clicking. Start orchestrating.</span>
             </h1>
-            <div className="container" style={{ padding: "0" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "0" }}>
               <div className="actions">
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/contribution/understand-providers">Contribution</a>
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/hana" style={{ backgroundColor: "#1B90FF", color: "#000000" }}>SAP HANA</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/end-user-guides/btp">crossplane-provider-btp</a>
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/end-user-guides/btp" style={{ backgroundColor: "#002A86", color: "#ffffff" }}>SAP BTP</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/hana">crossplane-provider-hana</a>
+                  <a href="/crossplane-provider-docs/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry" style={{ backgroundColor: "#00144A", color: "#ffffff" }}>CloudFoundry</a>
                 </div>
                 <div className="action medium alt">
-                  <a href="/crossplane-provider-docs/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry">crossplane-provider-cloudfoundry</a>
+                  <a href="/crossplane-provider-docs/docs/contribution/understand-providers" style={{ backgroundColor: "#450B00", color: "#ffffff" }}>Contribute</a>
                 </div>
               </div>
+              <a href="https://open-control-plane.io" style={{ color: "inherit", opacity: 0.6, fontSize: "13px", textDecoration: "underline" }}>Bring Crossplane to your organization</a>
             </div>
           </div>
           <div className="image">
@@ -161,24 +162,7 @@ export default function Home() {
           >
             Start contributing
           </Link>
-          <span>
-            or explore{" "}
-            <Link to="/crossplane-provider-docs/docs/crossplane-provider-btp/docs/end-user-guides/btp">
-              our crossplane provider for SAP BTP
-            </Link>
-          </span>
-          <span>
-            or explore{" "}
-            <Link to="/crossplane-provider-docs/docs/crossplane-provider-hana/docs/end-user-guides/setup">
-              our crossplane provider for SAP HANA
-            </Link>
-          </span>
-          <span>
-            or explore{" "}
-            <Link to="/crossplane-provider-docs/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry">
-              our crossplane provider for Cloud Foundry
-            </Link>
-          </span>
+          
         </section>
 
         <section className="open-source-section">
