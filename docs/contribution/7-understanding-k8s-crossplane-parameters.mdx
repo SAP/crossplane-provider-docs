@@ -75,7 +75,7 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 **How it works:**
 - Each controller spawns exactly N workers (fixed count, not elastic)
 - The workqueue guarantees the same resource is never concurrently reconciled by two workers
-- Bottleneck is typically I/O wait, not CPU - concurrency can safely exceed CPU cores
+- Bottleneck is typically I/O  (network) wait, not CPU - concurrency can safely exceed CPU cores
 
 **Provider-specific behavior:**
 
