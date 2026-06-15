@@ -97,17 +97,19 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 ### 2. Global Rate Limiter (RPS)
 
-**What it controls:** A token-bucket rate limiter that throttles ALL reconcile requests from this provider.
+**What it controls:** A token-bucket rate limiter that throttles reconcile attempts across this provider before they reach the actual resource reconciler.
 
 **Default:** Same value as --max-reconcile-rate (coupled)
 
 **How it works:**
-- Tokens are replenished at N per second
-- Before reconciling, a token must be consumed
-- If no token available, reconcile is requeued after backoff
-- Sequential backoff: first failure → 1s, then 2s, 4s, 8s, ..., up to 60s max
+- Tokens are replenished at N per second, with a burst capacity of N × 10
+- Before the actual resource reconciler is called, Crossplane consults the global token-bucket limiter
+- If the request can run immediately, it proceeds
+- If no token is currently available, Crossplane reserves a future slot and returns `RequeueAfter` for the token-bucket delay
+- When that same rate-limited request comes back after the delay, Crossplane lets it through once without consulting/consuming the limiter again
+- This prevents an item from being rate-limited repeatedly forever before it ever reaches the actual reconciler
 
-**Key interaction:** `GlobalRateLimiter` (tokens/sec) = `MaxConcurrentReconciles` (workers). Setting RPS > concurrency wastes tokens; setting RPS < concurrency starves workers.
+**Important nuance:** The global limiter is not exponential backoff. Its delay is based on token availability. Per-item exponential backoff for reconcile errors is handled separately by the workqueue backoff described below.
 
 ### 3. Poll Interval
 
@@ -118,8 +120,8 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 **How it works:**
 - Creates steady-state RPS = N_resources / PollInterval
 - 1000 resources with 1m poll = ~16.7 polls/sec
-- Polls consume tokens from GlobalRateLimiter
-- After RequeueAfter, backoff is cleared and next poll begins immediately
+- Poll-triggered reconcile attempts are subject to the `GlobalRateLimiter`
+- Polling is typically scheduled with `RequeueAfter`; when a reconcile returns `RequeueAfter`, controller-runtime clears per-item failure backoff for that request
 
 **Tuning:**
 - Small ({'<' + '100'}): 1 minute
