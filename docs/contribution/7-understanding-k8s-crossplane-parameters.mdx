@@ -76,6 +76,7 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 - Each controller spawns exactly N workers (fixed count, not elastic)
 - The workqueue guarantees the same resource is never concurrently reconciled by two workers
 - Bottleneck is typically I/O  (network) wait, not CPU - concurrency can safely exceed CPU cores
+- Higher concurrency also increases parallel API activity. This can create short request spikes and hit external API rate limits, especially burst limits, during restarts, failovers, or when many resources are queued at once.
 
 **Provider-specific behavior:**
 
