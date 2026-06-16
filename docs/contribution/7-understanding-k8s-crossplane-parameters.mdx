@@ -186,12 +186,14 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 ### 8. Reconcile Timeout
 
-**What it controls:** Maximum time a single reconcile is allowed to run.
+**What it controls:** Maximum time allowed for the external reconcile operations (`Connect`, `Observe`, `Create`, `Update`, `Delete`) of a single resource.
 
 **Default:** 1 minute (most providers); some use 3m, 5m, or 10m
 
 **How it works:**
-- If reconcile exceeds timeout, it's canceled with a context deadline error
+- Crossplane applies the configured timeout to external provider operations
+- The reconciler also gets an additional 30s `reconcileGracePeriod` to update status, emit events, disconnect clients, and clean up after external operations finish or time out
+- If an external operation exceeds the configured timeout, it is canceled with a context deadline error
 - This triggers exponential backoff
 - Terraform Apply can take minutes for large resources
 
