@@ -155,7 +155,7 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 - Burst allows short spikes above QPS
 - Leader election renewal consumes 1 QPS per renewal cycle
 
-**Tuning:** If you increase MaxConcurrentReconciles, QPS/Burst scale automatically (N × 5). Do not set these manually unless you understand the call profile of your provider.
+**Tuning:** QPS/Burst are derived from `--max-reconcile-rate`, so they normally increase together with the reconcile concurrency configured through that flag. If provider logs or metrics show Kubernetes API client-side throttling, you can increase QPS/Burst, but do so gradually while monitoring API server latency, 429 responses, request saturation, and overall control-plane health. Raising these values only removes the provider-side client limit; the Kubernetes API server may still enforce its own limits per client, service account, priority level, or request type.
 
 ### 6. Leader Election
 
