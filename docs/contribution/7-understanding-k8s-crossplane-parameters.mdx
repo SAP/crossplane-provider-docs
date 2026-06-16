@@ -182,6 +182,8 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 **Critical for:** Environments with many resources (>500) or frequent restarts.
 
+**Recommendation:** Poll jitter should be enabled by default for all providers. It has little practical downside and helps spread polling over time, reducing burst load on Kubernetes and external APIs — especially in shared environments with many teams or many managed resources.
+
 ### 8. Reconcile Timeout
 
 **What it controls:** Maximum time a single reconcile is allowed to run.
