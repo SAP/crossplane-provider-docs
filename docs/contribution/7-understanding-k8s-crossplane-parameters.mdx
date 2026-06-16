@@ -168,7 +168,7 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 - Renewal is a KubeAPI call - consumes QPS
 - On failover: creates momentary thundering herd as all resources are requeued
 
-**Consideration:** For single-replica deployments, leader election is pure overhead. Some providers allow disabling it.
+**Consideration:** Leader election mainly matters for multi-replica deployments, where it enables a standby provider pod to take over quickly if the active pod fails. For most Crossplane provider use cases this immediate failover is not required: reconciliation is eventually consistent, and steady-state drift detection is driven by the poll interval, so a short pod restart or rescheduling delay usually only postpones reconciliation briefly. In single-replica deployments, leader election therefore adds Kubernetes API overhead without providing practical availability benefits. Some providers allow disabling it.
 
 ### 7. Poll Jitter
 
