@@ -113,7 +113,7 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 ### 3. Poll Interval
 
-**What it controls:** How often external state is checked for drift (observe-only poll).
+**What it controls:** For successfully reconciled resources, how often Crossplane schedules the next reconcile to observe external state and check for drift.
 
 **Default:** 1 minute (most providers)
 
