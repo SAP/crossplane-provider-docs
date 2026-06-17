@@ -11,6 +11,8 @@ import TabItem from '@theme/TabItem';
 
 ## Overview
 
+> **Sources:** [Crossplane rate-limiting design][src-crossplane-rate-limiting]
+
 A Crossplane provider reconciles managed resources against external cloud APIs. Effective throughput is governed by **layered mechanisms** - each layer has its own capacity and constraints. The effective throughput is bounded by the **most restrictive layer**.
 
 This document follows a **bottom-up approach**:
@@ -46,6 +48,8 @@ This document follows a **bottom-up approach**:
 
 ## The --max-reconcile-rate Fan-Out
 
+> **Sources:** [Crossplane rate-limiting design][src-crossplane-rate-limiting], [crossplane-runtime rate limiter defaults][src-xruntime-ratelimiter], [BTP provider flags and wiring][src-btp-main], [Cloud Foundry provider flags and wiring][src-cf-main]
+
 A single flag controls **three independent parameters**. This coupling is the most important concept to understand:
 
 ![--max-reconcile-rate](/img/contribution/k8s-params/diagram-02-max-reconcile-rate.svg)
@@ -58,13 +62,13 @@ A single flag controls **three independent parameters**. This coupling is the mo
 
 When a reconcile is triggered, the layers are checked in order. The effective throughput is bounded by the most restrictive layer.
 
-
-
 ---
 
 ## Key Parameters Explained
 
 ### 1. MaxConcurrentReconciles
+
+> **Sources:** [controller-runtime controller options][src-controller-runtime-options], [controller-runtime worker startup][src-controller-runtime-workers], [Crossplane rate-limiting design][src-crossplane-rate-limiting]
 
 **What it controls:** The number of worker goroutines that can reconcile resources in parallel.
 
@@ -97,6 +101,8 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 ### 2. Global Rate Limiter (RPS)
 
+> **Sources:** [crossplane-runtime rate limiter defaults][src-xruntime-ratelimiter], [crossplane-runtime rate-limiting reconciler][src-xruntime-rate-reconciler]
+
 **What it controls:** A token-bucket rate limiter that throttles reconcile attempts across this provider before they reach the actual resource reconciler.
 
 **Default:** Same value as --max-reconcile-rate (coupled)
@@ -112,6 +118,8 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 **Important nuance:** The global limiter is not exponential backoff. Its delay is based on token availability. Per-item exponential backoff for reconcile errors is handled separately by the workqueue backoff described below.
 
 ### 3. Poll Interval
+
+> **Sources:** [crossplane-runtime poll interval options][src-xruntime-poll], [BTP provider flags and wiring][src-btp-main], [Cloud Foundry provider flags and wiring][src-cf-main], [provider-helm flags][src-provider-helm], [provider-kubernetes flags][src-provider-kubernetes], [provider-sql flags][src-provider-sql]
 
 **What it controls:** For successfully reconciled resources, how often Crossplane schedules the next reconcile to observe external state and check for drift. See also [Poll Jitter](#7-poll-jitter), which adds a random offset to this interval to spread requeues over time.
 
@@ -131,6 +139,8 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 ### 4. Backoff (Per-Item Sequential)
 
+> **Sources:** [Crossplane rate-limiting design][src-crossplane-rate-limiting], [crossplane-runtime controller backoff][src-xruntime-controller-backoff], [BTP provider backoff flags][src-btp-main]
+
 **What it controls:** Exponential backoff for individual resource reconcile failures.
 
 **Default:** Base 1s, max 60s (framework default, not per-provider)
@@ -144,6 +154,8 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 **Pitfall:** Without RequeueAfter, a transient error can snowball to 60s wait - then the resource is effectively dead for a full minute.
 
 ### 5. QPS and Burst (client-go)
+
+> **Sources:** [crossplane-runtime REST config limiting][src-xruntime-ratelimiter], [client-go REST config][src-client-go-rest-config], [Crossplane rate-limiting design][src-crossplane-rate-limiting]
 
 **What it controls:** HTTP request rate to the Kubernetes API server.
 
@@ -159,18 +171,22 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 ### 6. Leader Election
 
+> **Sources:** [controller-runtime manager leader-election options][src-controller-runtime-manager], [controller-runtime leader-election defaults][src-controller-runtime-leader-defaults], [BTP provider leader-election wiring][src-btp-main], [Cloud Foundry provider leader-election wiring][src-cf-main]
+
 **What it controls:** Prevents multiple replicas from reconciling simultaneously.
 
-**Default:** On (enabled by default in controller-runtime)
+**Default:** Disabled by default in the BTP and Cloud Foundry providers (`--leader-election=false`). If enabled without overrides, controller-runtime uses its own leader-election defaults; these providers override the lease timings.
 
 **How it works:**
-- Lease-based: renews every 15s, expires after 30s
-- Renewal is a KubeAPI call - consumes QPS
+- Lease-based: controller-runtime defaults to 15s lease duration, 10s renew deadline, and 2s retry period; BTP and Cloud Foundry override this to 60s lease duration and 50s renew deadline
+- Lease renewal is a KubeAPI call - consumes QPS
 - On failover: creates momentary thundering herd as all resources are requeued
 
 **Consideration:** Leader election mainly matters for multi-replica deployments, where it enables a standby provider pod to take over quickly if the active pod fails. For most Crossplane provider use cases this immediate failover is not required: reconciliation is eventually consistent, and steady-state drift detection is driven by the poll interval, so a short pod restart or rescheduling delay usually only postpones reconciliation briefly. In single-replica deployments, leader election therefore adds Kubernetes API overhead without providing practical availability benefits. Some providers allow disabling it.
 
 ### 7. Poll Jitter
+
+> **Sources:** [crossplane-runtime poll jitter hook][src-xruntime-poll-jitter], [provider-kubernetes poll jitter flag][src-provider-kubernetes]
 
 **What it controls:** Random offset added to PollInterval to spread requeues over time.
 
@@ -185,6 +201,8 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 **Recommendation:** Poll jitter should be enabled by default for all providers. It has little practical downside and helps spread polling over time, reducing burst load on Kubernetes and external APIs — especially in shared environments with many teams or many managed resources.
 
 ### 8. Reconcile Timeout
+
+> **Sources:** [crossplane-runtime timeout defaults][src-xruntime-timeout-defaults], [crossplane-runtime timeout option and grace period][src-xruntime-timeout], [Cloud Foundry Service Instance timeout][src-cf-serviceinstance-timeout], [provider-helm timeout flag][src-provider-helm]
 
 **What it controls:** Maximum time allowed for the external reconcile operations (`Connect`, `Observe`, `Create`, `Update`, `Delete`) of a single resource.
 
@@ -204,12 +222,6 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 - **provider-helm:** 10m
 - **provider-kubernetes:** 1m
 - **provider-sql:** 1m
-
----
-
-## Parameter Interaction Matrix
-
-
 
 ---
 
@@ -254,23 +266,9 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 ---
 
-## Quick Reference
-
-
-
-**Remember:** The effective throughput is bounded by the **most restrictive layer**. Start by understanding your external API limits, then tune internal parameters to operate safely below that ceiling.
-
----
-
-## Further Reading
-
-- **Provider-specific tuning:** See individual provider documentation for provider-specific knobs and recommendations
-- **Debugging:** Use `kubectl describe` to inspect managed resources and their conditions
-- **Metrics:** Monitor `workqueue_*` and `reconcile_*` metrics to understand actual throughput
-
----
-
 ## Summary
+
+> **Sources:** [Crossplane rate-limiting design][src-crossplane-rate-limiting], [crossplane-runtime controller options][src-xruntime-options], [crossplane-runtime rate limiter defaults][src-xruntime-ratelimiter]
 
 Understanding Crossplane provider parameters requires understanding the **layered architecture**:
 
@@ -281,3 +279,24 @@ Understanding Crossplane provider parameters requires understanding the **layere
 5. **External APIs** are the hard ceiling you cannot tune
 
 The key insight: **parameters interact across layers**, and the effective throughput is bounded by the most restrictive layer. Start by understanding external API limits, then tune internal parameters to operate safely below that ceiling.
+
+[src-crossplane-rate-limiting]: https://github.com/crossplane/crossplane/blob/main/design/one-pager-rate-limiting.md
+[src-xruntime-options]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/controller/options.go#L29-L72
+[src-xruntime-ratelimiter]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/ratelimiter/default.go#L48-L56
+[src-xruntime-controller-backoff]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/ratelimiter/default.go
+[src-xruntime-rate-reconciler]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/ratelimiter/reconciler.go#L29-L84
+[src-xruntime-poll]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/reconciler/managed/reconciler.go#L620-L655
+[src-xruntime-poll-jitter]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/reconciler/managed/reconciler.go#L657-L666
+[src-xruntime-timeout-defaults]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/reconciler/managed/reconciler.go#L48-L49
+[src-xruntime-timeout]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/reconciler/managed/reconciler.go#L610-L618
+[src-controller-runtime-options]: https://github.com/kubernetes-sigs/controller-runtime/blob/v0.20.0/pkg/config/controller.go#L22-L62
+[src-controller-runtime-workers]: https://github.com/kubernetes-sigs/controller-runtime/blob/v0.20.0/pkg/internal/controller/controller.go#L233-L243
+[src-controller-runtime-manager]: https://github.com/kubernetes-sigs/controller-runtime/blob/v0.20.0/pkg/manager/manager.go#L148-L221
+[src-controller-runtime-leader-defaults]: https://github.com/kubernetes-sigs/controller-runtime/blob/v0.20.0/pkg/manager/internal.go#L51-L54
+[src-client-go-rest-config]: https://github.com/kubernetes/client-go/blob/v0.35.2/rest/config.go#L46-L165
+[src-btp-main]: https://github.com/SAP/crossplane-provider-btp/blob/07c20cea2ac3531f0040e5fa31aae38d260f8708/cmd/provider/main.go#L33-L119
+[src-cf-main]: https://github.com/SAP/crossplane-provider-cloudfoundry/blob/84e25a76497da078b3ec35376eae8f4ae522805f/cmd/provider/main.go#L34-L119
+[src-cf-serviceinstance-timeout]: https://github.com/SAP/crossplane-provider-cloudfoundry/blob/84e25a76497da078b3ec35376eae8f4ae522805f/internal/controller/serviceinstance/controller.go#L66-L66
+[src-provider-helm]: https://github.com/crossplane-contrib/provider-helm/blob/master/cmd/provider/main.go#L71-L195
+[src-provider-kubernetes]: https://github.com/crossplane-contrib/provider-kubernetes/blob/main/cmd/provider/main.go#L80-L250
+[src-provider-sql]: https://github.com/crossplane-contrib/provider-sql/blob/master/cmd/provider/main.go#L44-L108
