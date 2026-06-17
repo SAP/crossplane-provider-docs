@@ -25,14 +25,24 @@ This document follows a **bottom-up approach**:
 
 ## The Configuration Stack
 
-<div style={{textAlign: "center", margin: "20px 0"}}>
+### From CLI Flags to External APIs
 
-![Configuration Stack](/img/contribution/k8s-params/diagram-01-configuration-stack.svg)
+```mermaid
+flowchart TD
+    l4["Layer 4: Provider CLI Flags<br/>`cmd/provider/main.go`"]
+    l3["Layer 3: Crossplane-Runtime<br/>`managed.Reconciler, GlobalRateLimiter, PollInterval`"]
+    l2["Layer 2: controller-runtime<br/>`Controller, Workqueue, MaxConcurrentReconciles, Cache`"]
+    l1["Layer 1: client-go<br/>`rest.Config, QPS/Burst, Leader Election`"]
+    l0["Layer 0: External APIs<br/>`Server-side limits, hard ceiling`"]
 
-<!-- https://play.d2lang.com/?script=lJTfauM6EMbv_RQDuY3T_Gk5oIsDbWhDIQdykoVlITeqNLVFx1J2NG6TTf3ui2y33XZbSi8yxOMZzU8f81mcECp4rGwGMBgM4FuJMA_-1hU1a3HBw0a0ueveDuCKQwXz5TVckS4iSIDLvSB7TXC-uo7ZY5YZ0jFiVHDMAG7CvvsDEEu9QwWMRrQvCNvkg7NSKvhnPO5q5JBwuobUzRY5Z21dHRWc9ekoHO4w73u7ziZLvybL-hulI_qJgnvJADxqViBhlxv0gpy9GXcbvOTR_UIF027SAJxockaBcI1PA-hUwSNpwX0GsLUu7kgfyHmMR9guz9eLy-M2jTwu9QEZThWsONw7i_wiXNPAdgttmcjRVPZk19ecVNr5UREaaJKYaVjCa0VVSc4n7NGtI1KwdEUp88CaWrbZh2zvoM0UzDnEVOQxX9deXIWv0SrtdYF2tEYTvHGEPIQFhRtNay24dJWTlFoFousk6r2mpgOffQK-SZgXVGPLPf2SplMFJnjhQJTW4z1wSFvcVwzhe-C7nzXWOIT_9H4evKmZ0cvzteIQ5tqU2MNPP4FfBLLoOdgWfvIl-IkCQw695EV4y8wYZdTZbwj_rzYnFzVHGcISddqfS0KTPNlTTj6h_IFE4WHBiL7lHH-Jc6xee_sN6wb5HjmPziJQ2oM4hFKzBYOOnC-gaaClHH9E-fxhaO2sYI22fQ47bZwcFEyyv91-9mfO6lgqmL3Y1wQK_HRS71bI_wWatXHaxkkbx9nvAAAA__8%3D&layout=elk&-->
+    l4 --> l3 --> l2 --> l1 --> l0
 
-</div>
-
+    style l4 fill:#F08080,stroke:none,color:#000
+    style l3 fill:#6A5ACD,stroke:none,color:#fff
+    style l2 fill:#DAA520,stroke:none,color:#000
+    style l1 fill:#9ACD32,stroke:none,color:#000
+    style l0 fill:#fff,stroke:#f00,stroke-width:4px,color:#f00
+```
 
 ### Layer Descriptions
 
@@ -52,9 +62,37 @@ This document follows a **bottom-up approach**:
 
 A single flag controls **three independent parameters**. This coupling is the most important concept to understand:
 
-![--max-reconcile-rate](/img/contribution/k8s-params/diagram-02-max-reconcile-rate.svg)
+### One flag, three independent parameters
 
-<!-- https://play.d2lang.com/?script=lJRRa9s8FIbv9SsO_m4_l6RtlkXQwRbYGOvWLN1lYcj2USOiSN7RMU038t-HXDtx42TgS70ceJ_z5MRs2KKEPwLAqgythDTdqG1KmHuXG4spKUb4qFx6V_GDu3MI2qrH_4FXhAjGFViiK9AxlIrUBhkpCICwUiVKYNxyfPFzWwOgveM0mN8oYfy2TjJvCwlMFb4MGGslPK0Mx_dOADhUJIF9meboGEnshIgYp3FvvtVNDUJh1Ma7okdRlyT_4ex68maU1Flg8muMqdbT0bRJa97cW08HqCPmXQsE6TuICNZsDCO9MpskYrcf2qhtRD4_8KsMWUWB-xPiVcEn6zNll4rx9iWCG2j2P7XuaFTMtB60WKfuZ6iy5mRu1TMSXEn44dfoIKvyNTIsF_dd92d__qb1BE9zGJN--ZHbPYsQe5lf1XbuXV4RoeNlexTh30q0nunrq0FKmsKejksJc--YvLVI8ORpjRSGCenRHAlpqjs31BFxOJqEMPDF3DttHi--L-6jgsmD66Yf4mTMx6PkvJ1LLCbTYXZaip6esYQvVYbvF58htyZ-Mwap6aEcqWl7u3-fg5y_AQAA__8%3D&layout=elk& -->
+```mermaid
+flowchart TD
+    flag{"--max-reconcile-rate=N"}
+
+    ratelimiter["GlobalRateLimiter = N"]
+    maxconc["MaxConcurrentReconciles = N"]
+    qpsburst["rest.Config.QPS = N*5<br/>rest.Config.Burst = N*10"]
+
+    ratelimiter_subtitle["Layer 3: Token bucket RPS"]
+    maxconc_subtitle["Layer 2: Controller workers"]
+    qpsburst_subtitle["Layer 1: KubeAPI client"]
+
+    flag --> ratelimiter
+    flag --> maxconc
+    flag --> qpsburst
+
+    ratelimiter --> ratelimiter_subtitle
+    maxconc --> maxconc_subtitle
+    qpsburst --> qpsburst_subtitle
+
+    style flag fill:#F08080,stroke:#c06060,stroke-width:2px,color:#000
+    style ratelimiter fill:#6A5ACD,stroke:none,color:#fff
+    style maxconc fill:#DAA520,stroke:none,color:#000
+    style qpsburst fill:#9ACD32,stroke:none,color:#000
+
+    style ratelimiter_subtitle fill:none,stroke:none,color:#6A5ACD
+    style maxconc_subtitle fill:none,stroke:none,color:#DAA520
+    style qpsburst_subtitle fill:none,stroke:none,color:#9ACD32
+```
 
 ---
 
