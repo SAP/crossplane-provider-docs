@@ -9,6 +9,17 @@ import TabItem from '@theme/TabItem';
 
 > **What you'll learn:** This advanced guide explains the tunable knobs (parameters) that control Crossplane provider behavior at scale. You'll understand how these parameters interact, what defaults mean, and how to tune them for different landscape sizes.
 
+## Quick Tuning Guide
+
+If you just need a practical starting point, use this table first and then read the detailed sections below for the reasoning and trade-offs behind it.
+
+| Landscape size | Suggested `--max-reconcile-rate` | Suggested poll interval | Notes |
+|----------------|----------------------------------|--------------------------|-------|
+| **{'<' + '100'}** | 1-5 | 1m | Defaults are usually fine |
+| **100-500** | 5-10 | 1-5m | Add poll jitter if available |
+| **500-2000** | 10-20 | 3-5m | Add jitter and verify external API limits |
+| **2000+** | 20+ | 5-10m | External APIs usually become the bottleneck; consider sharding |
+
 ## Overview
 
 > **Sources:** [Crossplane rate-limiting design][src-crossplane-rate-limiting]
@@ -263,7 +274,7 @@ When a reconcile is triggered, the layers are checked in order. The effective th
 
 ---
 
-## Tuning by Landscape Size
+## Detailed Tuning by Landscape Size
 
 | Resources | MaxConc | RPS | Poll | QPS/Burst | Notes |
 |-----------|---------|-----|------|-----------|-------|
