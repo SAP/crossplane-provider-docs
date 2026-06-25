@@ -73,6 +73,10 @@ flowchart TD
 
 A single flag controls **three independent parameters**. This coupling is the most important concept to understand:
 
+:::tip BTP provider configuration
+For BTP-specific instructions on configuring `--max-reconcile-rate`, `--poll`, `--sync`, backoff, and leader-election flags via `DeploymentRuntimeConfig`, see [Configure Controller Flags][btp-controller-flags].
+:::
+
 ### One flag, three independent parameters
 
 ```mermaid
@@ -329,6 +333,7 @@ Understanding Crossplane provider parameters requires understanding the **layere
 
 The key insight: **parameters interact across layers**, and the effective throughput is bounded by the most restrictive layer. Start by understanding external API limits, then tune internal parameters to operate safely below that ceiling.
 
+[btp-controller-flags]: /docs/crossplane-provider-btp/docs/end-user-guides/setup/configure-controller-flags
 [src-crossplane-rate-limiting]: https://github.com/crossplane/crossplane/blob/main/design/one-pager-rate-limiting.md
 [src-xruntime-options]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/controller/options.go#L29-L72
 [src-xruntime-ratelimiter]: https://github.com/crossplane/crossplane-runtime/blob/v1.20.0/pkg/ratelimiter/default.go#L48-L56
