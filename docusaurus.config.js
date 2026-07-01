@@ -104,6 +104,26 @@ const config = {
             label: 'Contribute',
           },
           {
+            type: 'dropdown',
+            label: 'CRD Browser',
+            position: 'right',
+            className: 'navbar-crd-browser',
+            items: [
+              {
+                href: 'https://doc.crds.dev/github.com/SAP/crossplane-provider-btp',
+                label: 'crossplane-provider-btp',
+              },
+              {
+                href: 'https://doc.crds.dev/github.com/SAP/crossplane-provider-hana',
+                label: 'crossplane-provider-hana',
+              },
+              {
+                href: 'https://doc.crds.dev/github.com/SAP/crossplane-provider-cloudfoundry',
+                label: 'crossplane-provider-cloudfoundry',
+              },
+            ],
+          },
+          {
             href: 'https://github.com/SAP/crossplane-provider-docs',
             label: 'GitHub',
             position: 'right',
