@@ -42,6 +42,7 @@ const config = {
           path: 'docs',
           routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
+          sidebarCollapsible: true,
           remarkPlugins: [remarkDirective, remarkImageLight],
           exclude: [
             // Exclude everything in a submodule except its docs/ subfolder.
@@ -78,10 +79,29 @@ const config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'mainSidebar',
+            to: '/docs/get-started/understand-providers',
             position: 'left',
-            label: 'Docs',
+            label: 'Get started',
+          },
+          {
+            to: '/docs/crossplane-provider-hana/docs/end-user-guides/hana',
+            position: 'left',
+            label: 'SAP HANA',
+          },
+          {
+            to: '/docs/crossplane-provider-btp/docs/end-user-guides/btp',
+            position: 'left',
+            label: 'SAP BTP',
+          },
+          {
+            to: '/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry',
+            position: 'left',
+            label: 'CloudFoundry',
+          },
+          {
+            to: '/docs/get-started/understand-providers',
+            position: 'left',
+            label: 'Contribute',
           },
           {
             href: 'https://github.com/SAP/crossplane-provider-docs',
@@ -98,7 +118,7 @@ const config = {
             items: [
               {
                 label: 'Contribution',
-                to: '/docs/contribution/understand-providers',
+                to: '/docs/get-started/understand-providers',
               },
               {
                 label: 'crossplane-provider-btp',
@@ -133,6 +153,11 @@ const config = {
       prism: {
         theme: require('prism-react-renderer').themes.github,
         darkTheme: require('prism-react-renderer').themes.dracula,
+      },
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
+        },
       },
     }),
 
