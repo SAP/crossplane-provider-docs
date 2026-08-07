@@ -154,7 +154,7 @@ const config = {
               },
               {
                 label: 'xp-clifford',
-                to: '/docs/xp-clifford/docs/end-user-guides/overview',
+                to: '/docs/xp-clifford/docs/overview',
               },
             ],
           },
@@ -183,7 +183,7 @@ const config = {
 
   // Each submodule's docs/ directory is added so that images in docs/img/ are served at /img/...
   // To add a new submodule, append its docs path, e.g. 'docs/crossplane-provider-xyz/docs'
-  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs', 'docs/crossplane-provider-cloudfoundry/docs'],
+  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs', 'docs/crossplane-provider-cloudfoundry/docs', 'docs/xp-clifford/docs'],
 };
 
 module.exports = config;

@@ -55,6 +55,7 @@ export default function Home() {
                   <a href="/crossplane-provider-docs/docs/get-started/understand-providers" style={{ backgroundColor: "#450B00", color: "#ffffff" }}>Contribute</a>
                 </div>
               </div>
+              <a href="/crossplane-provider-docs/docs/xp-clifford/docs/overview" style={{ color: "inherit", opacity: 0.6, fontSize: "13px", textDecoration: "underline" }}>Crossplane-ify existing landscapes in seconds with our CLI</a>
               <a href="https://open-control-plane.io" style={{ color: "inherit", opacity: 0.6, fontSize: "13px", textDecoration: "underline" }}>Bring Crossplane to your organization</a>
             </div>
           </div>
