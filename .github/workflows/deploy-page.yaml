@@ -6,6 +6,10 @@ on:
       - main
     # Review gh actions docs if you want to further define triggers, paths, etc
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
+  schedule:
+    # Daily rebuild so the roadmaps refresh
+    # 02:03 UTC
+    - cron: '3 2 * * *'
 
 jobs:
   build:
@@ -27,6 +31,8 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required by roadmap plugin
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
