@@ -42,7 +42,15 @@ module.exports = function roadmapPlugin(context) {
       };
       const out = [];
       for (const cfg of configs) {
-        out.push(await buildProviderRoadmap(cfg, headers));
+        try {
+          out.push(await buildProviderRoadmap(cfg, headers));
+        } catch (err) {
+          // Don't fail the whole build for one provider's roadmap. A rate-limit (common
+          // without GITHUB_TOKEN) or network error degrades that page to empty; other docs
+          // build normally. Set GITHUB_TOKEN to raise the limit from 60/hr to 5000/hr.
+          console.warn(`roadmap-plugin: skipping ${cfg.provider} roadmap: ${err.message}`);
+          out.push({ provider: cfg.provider, title: cfg.title, repo: cfg.repo, labelPrefix: cfg.roadMapLabelPrefix, versions: [] });
+        }
       }
       return out;
     },
