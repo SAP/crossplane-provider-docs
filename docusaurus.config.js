@@ -33,6 +33,8 @@ const config = {
     locales: ['en'],
   },
 
+  plugins: [require.resolve('./src/plugins/roadmap-plugin')],
+
   presets: [
     [
       'classic',

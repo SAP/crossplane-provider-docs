@@ -1,0 +1,87 @@
+.sketch {
+  max-width: 820px;
+}
+
+.subtitle {
+  opacity: 0.7;
+  transform: rotate(-0.4deg);
+  margin-bottom: 1.5rem;
+}
+
+.versionBlock {
+  margin-bottom: 1.5rem;
+}
+
+.versionHead {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Version chip: wobbly hand-drawn box. */
+.versionTag {
+  display: inline-block;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 0.12em 0.75em;
+  background: var(--ifm-color-primary-lightest, #e9f2ff);
+  color: var(--ifm-color-primary-darkest, #123);
+  border: 2px solid currentColor;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  transform: rotate(-1deg);
+}
+
+.searchLink {
+  margin-left: auto;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  white-space: nowrap;
+  transform: rotate(-0.6deg);
+}
+.searchLink:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Issue list under a version: hand-drawn box with dashed row separators. */
+.issues {
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem 0;
+  border: 2px solid var(--ifm-color-emphasis-800, #333);
+  border-radius: 12px 220px 18px 220px / 220px 14px 220px 16px;
+  box-shadow: 3px 3px 0 var(--ifm-color-emphasis-300, #bbb);
+  background: var(--ifm-background-surface-color, #fff);
+}
+.issue {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  padding: 0.4rem 0.9rem;
+  border-bottom: 1.5px dashed var(--ifm-color-emphasis-300, #ccc);
+}
+.issue:last-child {
+  border-bottom: none;
+}
+.issueNo {
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.issueNo:hover {
+  text-decoration: underline;
+}
+.issueTitle {
+  line-height: 1.3;
+}
+.issueTitle code {
+  font-size: 0.9em;
+}
+
+/* Dark mode. */
+[data-theme='dark'] .issues {
+  background: var(--ifm-background-surface-color);
+  box-shadow: 3px 3px 0 var(--ifm-color-emphasis-500);
+}
