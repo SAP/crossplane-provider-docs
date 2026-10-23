@@ -266,7 +266,7 @@ spec:
 
 </details>
 
-5. [Import the organization](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#import-organization-)
+5. [Import the organization](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/manage-orgs-spaces#import-organization-)
 
 <details>
 <summary>`Organization`</summary>
@@ -286,7 +286,7 @@ spec:
 
 </details>
 
-6. [Create a space](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#create-spaces-)
+6. [Create a space](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/manage-orgs-spaces#create-spaces-)
 
 <details>
 <summary>`Space`</summary>
@@ -306,7 +306,7 @@ spec:
 
 </details>
 
-7. [Assign](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/configure-provider-cf#manage-user-roles) the `SpaceDeveloper` role to the user you want to deploy the CAP application with later on
+7. [Assign](/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/manage-orgs-spaces#manage-user-roles) the `SpaceDeveloper` role to the user you want to deploy the CAP application with later on
 
 <details>
 <summary>`SpaceRole`</summary>
