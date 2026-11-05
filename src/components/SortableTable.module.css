@@ -1,0 +1,56 @@
+.wrap {
+  margin: 1rem 0 1.5rem;
+}
+
+.search {
+  width: 100%;
+  max-width: 24rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--ifm-font-color-base);
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search:focus-visible {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--ifm-color-primary) 25%, transparent);
+}
+
+.sortBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.sortBtn:hover {
+  color: var(--ifm-color-primary);
+}
+
+.arrow {
+  font-size: 0.75em;
+  color: var(--ifm-color-emphasis-500);
+}
+
+.sortBtn:hover .arrow {
+  color: var(--ifm-color-primary);
+}
+
+.empty {
+  text-align: center;
+  font-style: italic;
+  color: var(--ifm-color-emphasis-600);
+}
