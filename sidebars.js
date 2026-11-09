@@ -65,7 +65,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: '"Import-to-Crossplane" CLI',
+      label: 'Import existing cloud landscapes',
       collapsible: true,
       collapsed: true,
       items: [
