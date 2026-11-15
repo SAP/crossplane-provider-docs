@@ -33,6 +33,8 @@ const config = {
     locales: ['en'],
   },
 
+  plugins: [require.resolve('./src/plugins/roadmap-plugin')],
+
   presets: [
     [
       'classic',
@@ -42,6 +44,7 @@ const config = {
           path: 'docs',
           routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
+          sidebarCollapsible: true,
           remarkPlugins: [remarkDirective, remarkImageLight],
           exclude: [
             // Exclude everything in a submodule except its docs/ subfolder.
@@ -78,10 +81,49 @@ const config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'mainSidebar',
+            to: '/docs/get-started/understand-providers',
             position: 'left',
-            label: 'Docs',
+            label: 'Get started',
+          },
+          {
+            to: '/docs/crossplane-provider-hana/docs/end-user-guides/hana',
+            position: 'left',
+            label: 'SAP HANA',
+          },
+          {
+            to: '/docs/crossplane-provider-btp/docs/end-user-guides/btp',
+            position: 'left',
+            label: 'SAP BTP',
+          },
+          {
+            to: '/docs/crossplane-provider-cloudfoundry/docs/end-user-guides/cloudfoundry',
+            position: 'left',
+            label: 'CloudFoundry',
+          },
+          {
+            to: '/docs/get-started/understand-providers',
+            position: 'left',
+            label: 'Contribute',
+          },
+          {
+            type: 'dropdown',
+            label: 'CRD Browser',
+            position: 'right',
+            className: 'navbar-crd-browser',
+            items: [
+              {
+                href: 'https://doc.crds.dev/github.com/SAP/crossplane-provider-btp',
+                label: 'crossplane-provider-btp',
+              },
+              {
+                href: 'https://doc.crds.dev/github.com/SAP/crossplane-provider-hana',
+                label: 'crossplane-provider-hana',
+              },
+              {
+                href: 'https://doc.crds.dev/github.com/SAP/crossplane-provider-cloudfoundry',
+                label: 'crossplane-provider-cloudfoundry',
+              },
+            ],
           },
           {
             href: 'https://github.com/SAP/crossplane-provider-docs',
@@ -98,7 +140,7 @@ const config = {
             items: [
               {
                 label: 'Contribution',
-                to: '/docs/contribution/understand-providers',
+                to: '/docs/get-started/understand-providers',
               },
               {
                 label: 'crossplane-provider-btp',
@@ -114,7 +156,7 @@ const config = {
               },
               {
                 label: 'xp-clifford',
-                to: '/docs/xp-clifford/docs/end-user-guides/overview',
+                to: '/docs/xp-clifford/docs/overview',
               },
             ],
           },
@@ -134,11 +176,16 @@ const config = {
         theme: require('prism-react-renderer').themes.github,
         darkTheme: require('prism-react-renderer').themes.dracula,
       },
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
+        },
+      },
     }),
 
   // Each submodule's docs/ directory is added so that images in docs/img/ are served at /img/...
   // To add a new submodule, append its docs path, e.g. 'docs/crossplane-provider-xyz/docs'
-  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs', 'docs/crossplane-provider-cloudfoundry/docs'],
+  staticDirectories: ['static', 'docs/crossplane-provider-btp/docs', 'docs/crossplane-provider-hana/docs', 'docs/crossplane-provider-cloudfoundry/docs', 'docs/xp-clifford/docs'],
 };
 
 module.exports = config;

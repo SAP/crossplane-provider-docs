@@ -95,6 +95,12 @@ Some diagrams or screenshots have a transparent or white background and become h
 
 Use `:::image-light` for screenshots, architecture diagrams, or any image that has a transparent or near-white background and looks broken/invisible in dark mode.
 
+### Roadmap pages (per-provider, generated from GitHub)
+
+A provider can opt into a **roadmap page** generated at build time from its GitHub issues (labeled `roadmap-item/<version>`), grouped by version. Opt in by committing `docs/roadmap.config.json` + `docs/roadmap.mdx` in the provider repo - no change needed here.
+
+See the top comment in [`src/plugins/roadmap-plugin.js`](./src/plugins/roadmap-plugin.js) for the config, opt-in files, labeling model, and how it fetches and refreshes.
+
 ### Build
 
 ```bash

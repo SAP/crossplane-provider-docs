@@ -839,3 +839,37 @@ html[data-theme="dark"] .doc-image-light img {
   border-radius: 8px;
 }
 
+/* ===== CRD Browser Navbar Button ===== */
+.navbar-crd-browser {
+  padding: 4px 14px !important;
+  border-radius: 100px !important;
+  background: var(--ifm-color-primary) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--ifm-color-primary) 35%, transparent);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease !important;
+  margin-left: 6px;
+}
+
+.navbar-crd-browser:hover {
+  background: var(--ifm-color-primary-dark) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--ifm-color-primary) 50%, transparent) !important;
+  transform: translateY(-1px);
+}
+
+.navbar-crd-browser:active {
+  transform: translateY(0);
+}
+
+[data-theme='dark'] .navbar-crd-browser {
+  background: var(--ifm-color-primary) !important;
+  color: #ffffff !important;
+}
+
+[data-theme='dark'] .navbar-crd-browser:hover {
+  background: var(--ifm-color-primary-dark) !important;
+  color: #ffffff !important;
+}
